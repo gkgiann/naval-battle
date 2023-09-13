@@ -1,6 +1,8 @@
 MainGame = Class:extend()
 
 function MainGame:new()
+    mainGameSong = love.audio.newSource("sounds/modern_sine.mp3", "stream")
+
     backgound = love.graphics.newImage("assets/mainGame.jpg")
 
     navalBattleText = "BATALHA NAVAL"
@@ -28,13 +30,17 @@ end
 
 function MainGame:update(dt)
     if love.keyboard.isDown("space") then
+        love.audio.stop(mainGameSong)
         currentScene = "game"
     end
 
     self:movePlayText(dt)
+
 end
 
 function MainGame:draw()
+    love.audio.play(mainGameSong)
+
     love.graphics.draw(backgound)
 
     love.graphics.draw(navalBattleTextBlack, navalBattleTextX + 6, navalBattleTextY + 6)
