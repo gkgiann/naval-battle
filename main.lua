@@ -1,7 +1,11 @@
 function love.load()
+
+    -- Músicas do battleship (NES)
+    -- https://downloads.khinsider.com/game-soundtracks/album/battleship-nes
+
     -- IMPORTANDO OUTROS ARQUIVOS
     Class = require "classic"
-    require "scenes/game"
+    require "scenes/setup"
     require "scenes/mainGame"
 
     -- TAMANHO DA JANELA
@@ -16,12 +20,12 @@ function love.load()
     love.graphics.setFont(font20)
 
     -- INSTANCIANDO AS CENAS/TELAS
-    game = Game()
+    setup = Setup()
     mainGame = MainGame()
 
     scenes = {
-        game = game,
-        mainGame = mainGame
+        mainGame = mainGame,
+        setup = setup
     }
 
     currentScene = "mainGame"

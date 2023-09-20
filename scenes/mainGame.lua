@@ -1,9 +1,10 @@
 MainGame = Class:extend()
 
 function MainGame:new()
-    mainGameSong = love.audio.newSource("sounds/modern_sine.mp3", "stream")
+    mainGameSong = love.audio.newSource("sounds/mainGame.mp3", "stream")
 
-    backgound = love.graphics.newImage("assets/mainGame.jpg")
+    backgound = love.graphics.newImage("assets/mainGame2.jpg")
+    backgoundPosition = windowHeight + 60
 
     navalBattleText = "BATALHA NAVAL"
     navalBattleTextWhite = love.graphics.newText(font90, navalBattleText)
@@ -13,35 +14,37 @@ function MainGame:new()
     playTextWhite = love.graphics.newText(font40, playText)
     playTextBlack = love.graphics.newText(font40, {{0, 0, 0}, playText})
 
-    copyrightText = "© Copyright G.E.R."
+    copyrightText = "Copyright ©2023 G.E.R."
     copyrightTextWhite = love.graphics.newText(font20, copyrightText)
     copyrightTextBlack = love.graphics.newText(font20, {{0, 0, 0}, copyrightText})
 
     navalBattleTextX, navalBattleTextY = (windowWidth - navalBattleTextWhite:getWidth()) / 2,
-        ((windowHeight - navalBattleTextWhite:getHeight()) / 2) - 50
+        ((windowHeight - navalBattleTextWhite:getHeight()) / 2) * 4
 
-    playTextX, playTextY = (windowWidth - playTextWhite:getWidth()) / 2,
-        ((windowHeight - playTextWhite:getHeight()) / 2) + 150
+    playTextX, playTextY = windowWidth, windowHeight
+
     playTextGoingUp, playTextCount = false, 0
 
-    copyrightTextX, copyrightTextY = windowWidth - copyrightTextWhite:getWidth() - 5,
-        windowHeight - copyrightTextWhite:getHeight() - 5
+    copyrightTextX, copyrightTextY = windowWidth, windowHeight - copyrightTextWhite:getHeight() - 5
 end
 
 function MainGame:update(dt)
     if love.keyboard.isDown("space") then
         love.audio.stop(mainGameSong)
-        currentScene = "game"
+        currentScene = "setup"
     end
 
+    self:initialAnimation(dt)
     self:movePlayText(dt)
 
 end
 
 function MainGame:draw()
+    love.window.setTitle("Batalha Naval")
+
     love.audio.play(mainGameSong)
 
-    love.graphics.draw(backgound)
+    love.graphics.draw(backgound, 0, backgoundPosition)
 
     love.graphics.draw(navalBattleTextBlack, navalBattleTextX + 6, navalBattleTextY + 6)
     love.graphics.draw(navalBattleTextWhite, navalBattleTextX, navalBattleTextY)
@@ -50,6 +53,31 @@ function MainGame:draw()
 
     love.graphics.draw(copyrightTextBlack, copyrightTextX + 3, copyrightTextY + 3)
     love.graphics.draw(copyrightTextWhite, copyrightTextX, copyrightTextY)
+
+end
+
+function MainGame:initialAnimation(dt)
+    
+    if backgoundPosition > 0 then
+        backgoundPosition = backgoundPosition - 10 * 20 * dt
+    elseif backgoundPosition < 0 then
+        backgoundPosition = 0
+    end
+
+    if copyrightTextX > windowWidth - copyrightTextWhite:getWidth() - 5 then
+        copyrightTextX = copyrightTextX - 5 * 10 * dt
+    elseif copyrightTextX < windowWidth - copyrightTextWhite:getWidth() - 5 then
+        copyrightTextX = windowWidth - copyrightTextWhite:getWidth() - 5
+    end
+
+    if navalBattleTextY > (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30 then
+        navalBattleTextY = navalBattleTextY - 10 * 20 * dt
+    elseif navalBattleTextY < (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30 then
+        navalBattleTextY = (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30
+
+        playTextX, playTextY = (windowWidth - playTextWhite:getWidth()) / 2,
+            ((windowHeight - playTextWhite:getHeight()) / 2) + 150
+    end
 
 end
 
@@ -63,10 +91,10 @@ function MainGame:movePlayText(dt)
     end
 
     if playTextGoingUp then
-        playTextY = playTextY + 15 * dt
+        playTextY = playTextY + 20 * dt
         playTextCount = playTextCount + 1
     else
-        playTextY = playTextY - 15 * dt
+        playTextY = playTextY - 20 * dt
         playTextCount = playTextCount - 1
     end
 end
