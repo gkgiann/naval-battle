@@ -40,6 +40,10 @@ function MainGame:update(dt)
 end
 
 function MainGame:draw()
+    inspirationGameText = love.graphics.newText(font30, "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)")
+        love.graphics.draw(inspirationGameText, 15,15)
+
+
     love.window.setTitle("Batalha Naval")
 
     love.audio.play(mainGameSong)
@@ -59,19 +63,19 @@ end
 function MainGame:initialAnimation(dt)
     
     if backgoundPosition > 0 then
-        backgoundPosition = backgoundPosition - 10 * 20 * dt
+        backgoundPosition = backgoundPosition - 10 * 15 * dt
     elseif backgoundPosition < 0 then
         backgoundPosition = 0
     end
 
     if copyrightTextX > windowWidth - copyrightTextWhite:getWidth() - 5 then
-        copyrightTextX = copyrightTextX - 5 * 10 * dt
+        copyrightTextX = copyrightTextX - 5 * 8 * dt
     elseif copyrightTextX < windowWidth - copyrightTextWhite:getWidth() - 5 then
         copyrightTextX = windowWidth - copyrightTextWhite:getWidth() - 5
     end
 
     if navalBattleTextY > (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30 then
-        navalBattleTextY = navalBattleTextY - 10 * 20 * dt
+        navalBattleTextY = navalBattleTextY - 10 * 15 * dt
     elseif navalBattleTextY < (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30 then
         navalBattleTextY = (windowHeight - navalBattleTextWhite:getHeight()) / 2 - 30
 
