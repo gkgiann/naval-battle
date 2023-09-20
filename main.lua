@@ -15,6 +15,7 @@ function love.load()
 
     -- FONTES
     font20 = love.graphics.newFont("fonts/wheatonCapitals.otf", 20)
+    font30 = love.graphics.newFont("fonts/wheatonCapitals.otf", 30)
     font40 = love.graphics.newFont("fonts/wheatonCapitals.otf", 40)
     font90 = love.graphics.newFont("fonts/wheatonCapitals.otf", 90)
     love.graphics.setFont(font20)
