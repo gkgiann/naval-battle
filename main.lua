@@ -6,6 +6,7 @@ function love.load()
     -- IMPORTANDO OUTROS ARQUIVOS
     Class = require "classic"
     require "scenes/setup"
+    require "scenes/classes/ship"
     require "scenes/mainGame"
 
     -- TAMANHO DA JANELA
@@ -29,7 +30,7 @@ function love.load()
         setup = setup
     }
 
-    currentScene = "mainGame"
+    currentScene = "setup"
 end
 
 function love.update(dt)
