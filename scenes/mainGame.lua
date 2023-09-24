@@ -40,15 +40,22 @@ function MainGame:update(dt)
 end
 
 function MainGame:draw()
-    inspirationGameText = love.graphics.newText(font30, "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)")
-        love.graphics.draw(inspirationGameText, 15,15)
+    love.graphics.setColor(love.math.colorFromBytes(165, 230, 255))
+    love.graphics.setBackgroundColor(love.math.colorFromBytes(0, 10, 50))
 
+    if backgoundPosition > 40 then
+        inspirationGameText = love.graphics.newText(font30,
+            "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)")
+        love.graphics.draw(inspirationGameText, 15, 15)
+    end
 
     love.window.setTitle("Batalha Naval")
 
     love.audio.play(mainGameSong)
 
+    love.graphics.setColor(love.math.colorFromBytes(100, 200, 255, 255))
     love.graphics.draw(backgound, 0, backgoundPosition)
+    love.graphics.setColor(1, 1, 1)
 
     love.graphics.draw(navalBattleTextBlack, navalBattleTextX + 6, navalBattleTextY + 6)
     love.graphics.draw(navalBattleTextWhite, navalBattleTextX, navalBattleTextY)
@@ -57,11 +64,9 @@ function MainGame:draw()
 
     love.graphics.draw(copyrightTextBlack, copyrightTextX + 3, copyrightTextY + 3)
     love.graphics.draw(copyrightTextWhite, copyrightTextX, copyrightTextY)
-
 end
 
 function MainGame:initialAnimation(dt)
-    
     if backgoundPosition > 0 then
         backgoundPosition = backgoundPosition - 10 * 15 * dt
     elseif backgoundPosition < 0 then
@@ -82,7 +87,6 @@ function MainGame:initialAnimation(dt)
         playTextX, playTextY = (windowWidth - playTextWhite:getWidth()) / 2,
             ((windowHeight - playTextWhite:getHeight()) / 2) + 150
     end
-
 end
 
 function MainGame:movePlayText(dt)

@@ -5,36 +5,26 @@ function Ship:new(len)
     self.column = 1
     self.isUp = false
     self.length = len
-    self.img = love.graphics.newImage(string.format('assets/ship%d.png', len))
+    self.img = love.graphics.newImage(string.format('assets/ships/ship%d.png', len))
     self.time = 0
-
 end
 
 function Ship:update(dt)
     self.time = self.time + dt
 
     self:move(dt)
-
 end
 
 function Ship:draw()
     if self.isUp then
-        love.graphics.draw(self.img, (32 * self.line) + 30, self.column * 32, math.rad(90))
+        love.graphics.draw(self.img, (33 * self.line) + 31, (33 * self.column) + 1, math.rad(90))
     else
-        love.graphics.draw(self.img, (32 * self.line), (32 * self.column), 0)
-
+        love.graphics.draw(self.img, (33 * self.line) + 3, (33 * self.column) + 1, 0)
     end
 end
 
 function Ship:move(dt)
-
     if self.time > 0.2 and love.keyboard.isDown("rshift") then
-        -- if self.isUp then
-        --     if self.length - 1 then
-                
-        --     end
-        -- end
-
         self.isUp = not self.isUp
         self.time = 0
     end
@@ -44,7 +34,6 @@ function Ship:move(dt)
             self.column = self.column - 1
             self.time = 0
         end
-
     end
 
     if self.time > 0.2 and love.keyboard.isDown("left") then
