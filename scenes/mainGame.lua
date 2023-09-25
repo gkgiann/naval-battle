@@ -2,6 +2,7 @@ MainGame = Class:extend()
 
 function MainGame:new()
     mainGameSong = love.audio.newSource("sounds/mainGame.mp3", "stream")
+    startGameEffect = love.audio.newSource("sounds/startGame.wav", "static")
 
     backgound = love.graphics.newImage("assets/mainGame2.jpg")
     backgoundPosition = windowHeight + 60
@@ -31,6 +32,7 @@ end
 function MainGame:update(dt)
     if love.keyboard.isDown("space") then
         love.audio.stop(mainGameSong)
+        love.audio.play(startGameEffect)
         currentScene = "setup"
     end
 
