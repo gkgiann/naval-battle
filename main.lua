@@ -14,6 +14,10 @@ function love.load()
     windowHeight = 768
     love.window.setMode(windowWidth, windowHeight)
 
+    -- EFEITOS SONOROS
+    wrongEffect = love.audio.newSource("sounds/wrong.wav", "static")
+    moveShipEffect = love.audio.newSource("sounds/moveShip.mp3", "static")
+
     -- FONTES
     font20 = love.graphics.newFont("fonts/wheatonCapitals.otf", 20)
     font30 = love.graphics.newFont("fonts/wheatonCapitals.otf", 30)
