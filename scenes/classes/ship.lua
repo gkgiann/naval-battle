@@ -25,8 +25,24 @@ end
 
 function Ship:move(dt)
     if self.time > 0.2 and love.keyboard.isDown("rshift") then
-        self.isUp = not self.isUp
-        self.time = 0
+        canRotate = true
+
+        if self.isUp then
+            if self.line >= 15 - (self.length - 2) then
+                canRotate = false
+            end
+        end
+
+        if not self.isUp then
+            if self.column >= 10 - (self.length - 2) then
+                canRotate = false
+            end
+        end
+
+        if canRotate then
+            self.isUp = not self.isUp
+            self.time = 0
+        end
     end
 
     if self.time > 0.2 and love.keyboard.isDown("up") then
