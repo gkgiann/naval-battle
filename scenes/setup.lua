@@ -33,11 +33,13 @@ function Setup:draw()
     ship2:draw()
 end
 
-function Setup:createGrid()
+function Setup:createGrid(x, y)
+    x, y = x and x or 0, y and y or 0
+
     love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 100))
     for i = 1, 15 do
         for j = 1, 10 do
-            love.graphics.rectangle("fill", i * 33, j * 33, 32, 32, 2, 2)
+            love.graphics.rectangle("fill", (i * 33) + x, (j * 33) + y, 32, 32, 2, 2)
         end
     end
     love.graphics.setColor(1, 1, 1)
