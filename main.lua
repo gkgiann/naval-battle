@@ -26,6 +26,14 @@ function love.load()
     font90 = love.graphics.newFont("fonts/wheatonCapitals.otf", 90)
     love.graphics.setFont(font20)
 
+    -- TAMANHO DO TABULEIRO
+    grid = {
+        -- columnsQuantity = 15,
+        -- linesQuantity = 10,
+        columnsQuantity = 12,
+        linesQuantity = 8,
+    }
+
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()
     mainGame = MainGame()
