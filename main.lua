@@ -6,8 +6,9 @@ function love.load()
     -- IMPORTANDO OUTROS ARQUIVOS
     Class = require "classic"
     require "scenes/setup"
-    require "scenes/classes/ship"
+    require "scenes/game"
     require "scenes/mainGame"
+    require "scenes/classes/ship"
 
     -- TAMANHO DA JANELA
     windowWidth = 1334
@@ -28,10 +29,12 @@ function love.load()
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()
     mainGame = MainGame()
+    game = Game()
 
     scenes = {
         mainGame = mainGame,
-        setup = setup
+        setup = setup,
+        game = game
     }
 
     currentScene = "setup"
