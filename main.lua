@@ -31,7 +31,7 @@ function love.load()
         -- columnsQuantity = 15,
         -- linesQuantity = 10,
         columnsQuantity = 12,
-        linesQuantity = 8,
+        linesQuantity = 8
     }
 
     -- INSTANCIANDO AS CENAS/TELAS

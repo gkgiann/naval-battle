@@ -7,7 +7,7 @@ function Setup:new()
     self.time = 0
     self.setShipEffect = love.audio.newSource("sounds/startGame.wav", "static")
 
-    ships = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+    ships = {Ship(2), Ship(3), Ship(4), Ship(5)}
 end
 
 function Setup:update(dt)
@@ -39,6 +39,11 @@ function Setup:update(dt)
     else
         for k, ship in pairs(ships) do
             ship.color.r, ship.color.g, ship.color.b = 0, 255, 0
+        end
+
+        if self.time > 2 then
+            currentScene = "game"
+            love.audio.stop()
         end
     end
 
@@ -98,6 +103,9 @@ end
 
 function Setup:isPositionFree()
     return true
+
+    -- currentShip
+
     -- FAZER UMA LÓGICA CABULOSA PARA VER SE O LUGAR
     -- ONDE VOU COLOCAR O NAVIO ESTÁ LIVRE, SE SIM, RETORNE TRUE
 end
