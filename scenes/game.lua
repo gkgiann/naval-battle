@@ -22,5 +22,5 @@ function Game:draw()
     createGrid()
 
     -- TABULEIRO DA MÁQUINA
-    createGrid(windowWidth - (grid.columnsQuantity * 33) - 66)
+    createGrid(windowWidth - (grid.columnsQuantity * 40) - 80)
 end

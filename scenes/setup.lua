@@ -95,7 +95,7 @@ function Setup:showShipsToSet()
             if ship.isCurrentSelected then
                 love.graphics.setColor(0, 1, 0)
             end
-            love.graphics.draw(ship.img, (grid.columnsQuantity + 2) * 33, i * 35)
+            love.graphics.draw(ship.img, (grid.columnsQuantity + 2) * 40, i * 44)
             love.graphics.setColor(1, 1, 1)
             i = i + 1
         end
@@ -115,7 +115,7 @@ function Setup:isPositionFree()
 end
 
 function Setup:showKeyboardControls()
-    local x = 720
+    local x = 780
 
     local textMove = love.graphics.newText(font40, "Movimentação do navio")
     local imgMove = love.graphics.newImage('assets/keyboard/move.png')

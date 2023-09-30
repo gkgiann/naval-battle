@@ -46,7 +46,7 @@ function love.load()
         game = game
     }
 
-    currentScene = "mainGame"
+    currentScene = "setup"
 end
 
 function love.update(dt)
@@ -68,7 +68,7 @@ function createGrid(x, y)
     love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 100))
     for i = 1, grid.columnsQuantity do
         for j = 1, grid.linesQuantity do
-            love.graphics.rectangle("fill", (i * 33) + x, (j * 33) + y, 32, 32, 2, 2)
+            love.graphics.rectangle("fill", (i * 40) + x, (j * 40) + y, 38, 38, 2, 2)
         end
     end
     love.graphics.setColor(1, 1, 1)

@@ -36,10 +36,12 @@ function Ship:draw()
             love.graphics.setColor(0, 1, 0)
         end
 
+        local plus = self.length < 5 and self.length * self.length or (self.length * self.length) - 8
+
         if self.isUp then
-            love.graphics.draw(self.img, (33 * self.column) + 31, (33 * self.line) + 1, math.rad(90))
+            love.graphics.draw(self.img, (40 * self.column) + 35, (40 * self.line) + plus, math.rad(90))
         else
-            love.graphics.draw(self.img, (33 * self.column) + 3, (33 * self.line) + 1, 0)
+            love.graphics.draw(self.img, (40 * self.column) + plus, (40 * self.line) + 2, 0)
         end
     end
 
