@@ -2,11 +2,13 @@ Setup = Class:extend()
 
 function Setup:new()
     self.currentShipIndex = 1
-    self.setupBackground = love.graphics.newImage("assets/mainGame.jpg")
+    self.setupBackground = love.graphics.newImage("assets/game.jpg")
     self.setupSong = love.audio.newSource("sounds/setup.mp3", "stream")
     self.time = 0
     self.setShipEffect = love.audio.newSource("sounds/startGame.wav", "static")
     self.shipSetMatrix = {}
+
+    self.setupSong:setLooping(true)
 
     for i = 1, grid.columnsQuantity do
         self.shipSetMatrix[i] = {}
