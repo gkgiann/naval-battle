@@ -27,13 +27,27 @@ function MainGame:new()
     self.playTextGoingUp, self.playTextCount = false, 0
 
     self.copyrightTextX, self.copyrightTextY = windowWidth, windowHeight - self.copyrightTextWhite:getHeight() - 5
+
+    self.time = 0
 end
 
 function MainGame:update(dt)
+    self.time = self.time + dt
+
     if love.keyboard.isDown("space") then
         love.audio.stop(self.mainGameSong)
         love.audio.play(self.startGameEffect)
         currentScene = "setup"
+    end
+
+    if self.time > 0.3 and love.keyboard.isDown("return") then
+        if grid.linesQuantity == 8 then
+            grid.linesQuantity, grid.columnsQuantity = 10, 15
+        else
+            grid.linesQuantity, grid.columnsQuantity = 8, 12
+        end
+
+        self.time = 0
     end
 
     self:initialAnimation(dt)
@@ -42,15 +56,7 @@ function MainGame:update(dt)
 end
 
 function MainGame:draw()
-    love.graphics.setColor(love.math.colorFromBytes(165, 230, 255))
     love.graphics.setBackgroundColor(love.math.colorFromBytes(0, 10, 50))
-
-    if self.backgoundPosition > 40 then
-        local inspirationGameText = love.graphics.newText(font30,
-            "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)")
-        love.graphics.draw(inspirationGameText, 15, 15)
-    end
-
     love.window.setTitle("Batalha Naval")
 
     love.audio.play(self.mainGameSong)
@@ -66,6 +72,29 @@ function MainGame:draw()
 
     love.graphics.draw(self.copyrightTextBlack, self.copyrightTextX + 3, self.copyrightTextY + 3)
     love.graphics.draw(self.copyrightTextWhite, self.copyrightTextX, self.copyrightTextY)
+
+    if self.backgoundPosition > 0 then
+        local inspirationGameText = love.graphics.newText(font30, {{0, 0, 0},
+                                                                   "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)"})
+        love.graphics.draw(inspirationGameText, 15, 18)
+
+        inspirationGameText = love.graphics.newText(font30,
+            "Esse jogo foi inspirado no jogo Battleship do NES (Nintendinho)")
+        love.graphics.draw(inspirationGameText, 15, 15)
+
+    else
+        local text = string.format('Tamanho do tabuleiro: %dx%d', grid.linesQuantity, grid.columnsQuantity)
+
+        local gridText = love.graphics.newText(font30, {{0, 0, 0}, text})
+        love.graphics.draw(gridText, 18, 20)
+        gridText = love.graphics.newText(font30, text)
+        love.graphics.draw(gridText, 15, 15)
+
+        local changeGridLength = love.graphics.newText(font30, {{0, 0, 0}, "Pressione enter para alterar"})
+        love.graphics.draw(changeGridLength, 18, 65)
+        changeGridLength = love.graphics.newText(font30, "Pressione enter para alterar")
+        love.graphics.draw(changeGridLength, 15, 60)
+    end
 end
 
 function MainGame:initialAnimation(dt)
