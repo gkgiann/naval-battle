@@ -41,6 +41,8 @@ function MainGame:update(dt)
     end
 
     if self.time > 0.3 and love.keyboard.isDown("return") then
+        love.audio.play(moveShipEffect)
+
         if grid.linesQuantity == 8 then
             grid.linesQuantity, grid.columnsQuantity = 10, 15
         else
