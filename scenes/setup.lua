@@ -115,21 +115,21 @@ function Setup:isPositionFree()
 end
 
 function Setup:showKeyboardControls()
-    local x = 780
+    local x = 900
 
-    local textMove = love.graphics.newText(font40, "Movimentação do navio")
+    local textMove = love.graphics.newText(font30, "Movimentação do navio")
     local imgMove = love.graphics.newImage('assets/keyboard/move.png')
 
     love.graphics.draw(textMove, x, 25)
     love.graphics.draw(imgMove, x - 50, 35)
 
-    local textRotate = love.graphics.newText(font40, "Girar navio")
+    local textRotate = love.graphics.newText(font30, "Girar navio")
     local imgRotate = love.graphics.newImage('assets/keyboard/shift.png')
 
     love.graphics.draw(textRotate, x, 250)
     love.graphics.draw(imgRotate, x, 270)
 
-    local textSet = love.graphics.newText(font40, "Confirmar navio")
+    local textSet = love.graphics.newText(font30, "Confirmar posição")
     local imgSet = love.graphics.newImage('assets/keyboard/enter.png')
 
     love.graphics.draw(textSet, x, 430)
