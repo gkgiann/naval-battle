@@ -149,3 +149,24 @@ function Ship:move(dt)
     end
 
 end
+
+function Ship:getMatrixPosition()
+    positions = {}
+
+    positions[1] = {}
+    positions[1].column = self.column
+    positions[1].line = self.line
+
+    for i = 2, self.length do
+        positions[i] = {}
+        if self.isUp then
+            positions[i].column = self.column
+            positions[i].line = self.line + (i - 1)
+        else
+            positions[i].column = self.column + (i - 1)
+            positions[i].line = self.line
+        end
+    end
+
+    return positions
+end

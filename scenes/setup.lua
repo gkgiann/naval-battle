@@ -6,6 +6,15 @@ function Setup:new()
     self.setupSong = love.audio.newSource("sounds/setup.mp3", "stream")
     self.time = 0
     self.setShipEffect = love.audio.newSource("sounds/startGame.wav", "static")
+    self.shipSetMatrix = {}
+
+    for i = 1, grid.columnsQuantity do
+        self.shipSetMatrix[i] = {}
+        
+        for j = 1, grid.linesQuantity do
+            self.shipSetMatrix[i][j] = 0
+        end
+    end
 
     ships = {Ship(2), Ship(3), Ship(4), Ship(5)}
 end
@@ -24,6 +33,13 @@ function Setup:update(dt)
         if self.time > 0.3 and self.currentShipIndex <= #ships and
             (love.keyboard.isDown("return") or love.keyboard.isDown("space")) then
             if self:isPositionFree() then
+
+                local shipMatrixPositions = currentShip:getMatrixPosition()
+
+                for k, position in pairs(shipMatrixPositions) do
+                    self.shipSetMatrix[position.column][position.line] = 1
+                end
+
                 self.currentShipIndex = self.currentShipIndex + 1
 
                 currentShip.isCurrentSelected = false
@@ -102,8 +118,15 @@ function Setup:showShipsToSet()
 end
 
 function Setup:isPositionFree()
-    return true
+    local shipMatrixPositions = currentShip:getMatrixPosition()
 
+    for k, position in pairs(shipMatrixPositions) do
+        if self.shipSetMatrix[position.column][position.line] == 1 then
+            return false
+        end
+    end
+
+    return true
     -- currentShip
 
     -- FAZER UMA LÓGICA CABULOSA PARA VER SE O LUGAR
