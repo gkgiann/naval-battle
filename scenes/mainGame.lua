@@ -36,6 +36,10 @@ function MainGame:update(dt)
         currentScene = "setup"
     end
 
+    if love.keyboard.isDown("t") then
+        test()
+    end
+
     self:initialAnimation(dt)
     self:movePlayText(dt)
 

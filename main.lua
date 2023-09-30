@@ -4,11 +4,12 @@ function love.load()
     -- https://downloads.khinsider.com/game-soundtracks/album/battleship-nes
 
     -- IMPORTANDO OUTROS ARQUIVOS
-    Class = require "classic"
+    Class = require "lib/classic"
     require "scenes/setup"
     require "scenes/game"
     require "scenes/mainGame"
     require "scenes/classes/ship"
+    require 'lib.sqlite3'
 
     -- TAMANHO DA JANELA
     windowWidth = 1334
