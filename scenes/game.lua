@@ -19,8 +19,8 @@ function Game:draw()
     love.window.setTitle("Batalha Naval")
 
     -- TABULEIRO DO JOGADOR
-    createGrid()
+    createGrid(-30, -30)
 
     -- TABULEIRO DA MÁQUINA
-    createGrid(windowWidth - (grid.columnsQuantity * 40) - 80)
+    createGrid(windowWidth - (grid.columnsQuantity * 40) - 45, -30)
 end
