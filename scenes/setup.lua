@@ -32,8 +32,7 @@ function Setup:update(dt)
             ship:update(dt)
         end
 
-        if self.time > 0.3 and self.currentShipIndex <= #ships and
-            (love.keyboard.isDown("return") or love.keyboard.isDown("space")) then
+        if self.time > 0.3 and self.currentShipIndex <= #ships and love.keyboard.isDown("return") then
             if self:isPositionFree() then
 
                 local shipMatrixPositions = currentShip:getMatrixPosition()
@@ -65,10 +64,6 @@ function Setup:update(dt)
         end
     end
 
-    if love.keyboard.isDown("backspace") then
-        love.audio.stop(self.setupSong)
-        currentScene = "mainGame"
-    end
 end
 
 function Setup:draw()
@@ -87,6 +82,7 @@ function Setup:draw()
         ship:draw()
     end
 
+    self:showKeyboardControls()
     self:showShipsToSet()
 
 end
@@ -116,8 +112,27 @@ function Setup:isPositionFree()
     end
 
     return true
-    -- currentShip
+end
 
-    -- FAZER UMA LÓGICA CABULOSA PARA VER SE O LUGAR
-    -- ONDE VOU COLOCAR O NAVIO ESTÁ LIVRE, SE SIM, RETORNE TRUE
+function Setup:showKeyboardControls()
+    local x = 720
+
+    local textMove = love.graphics.newText(font40, "Movimentação do navio")
+    local imgMove = love.graphics.newImage('assets/keyboard/move.png')
+
+    love.graphics.draw(textMove, x, 25)
+    love.graphics.draw(imgMove, x - 50, 35)
+
+    local textRotate = love.graphics.newText(font40, "Girar navio")
+    local imgRotate = love.graphics.newImage('assets/keyboard/shift.png')
+
+    love.graphics.draw(textRotate, x, 250)
+    love.graphics.draw(imgRotate, x, 270)
+
+    local textSet = love.graphics.newText(font40, "Confirmar navio")
+    local imgSet = love.graphics.newImage('assets/keyboard/enter.png')
+
+    love.graphics.draw(textSet, x, 430)
+    love.graphics.draw(imgSet, x, 480)
+
 end
