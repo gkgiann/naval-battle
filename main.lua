@@ -60,3 +60,16 @@ end
 function love.draw()
     scenes[currentScene]:draw()
 end
+
+function createGrid(x, y)
+    x, y = x and x or 0, y and y or 0
+
+    love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 100))
+    for i = 1, grid.columnsQuantity do
+        for j = 1, grid.linesQuantity do
+            love.graphics.rectangle("fill", (i * 33) + x, (j * 33) + y, 32, 32, 2, 2)
+        end
+    end
+    love.graphics.setColor(1, 1, 1)
+
+end

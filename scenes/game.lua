@@ -17,5 +17,10 @@ function Game:draw()
 
     love.audio.play(self.gameSong)
     love.window.setTitle("Batalha Naval")
-    love.graphics.print("Com os navios posicionados, hora de batalhar")
+
+    -- TABULEIRO DO JOGADOR
+    createGrid()
+
+    -- TABULEIRO DA MÁQUINA
+    createGrid(windowWidth - (grid.columnsQuantity * 33) - 66)
 end

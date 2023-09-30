@@ -12,7 +12,7 @@ function Setup:new()
 
     for i = 1, grid.columnsQuantity do
         self.shipSetMatrix[i] = {}
-        
+
         for j = 1, grid.linesQuantity do
             self.shipSetMatrix[i][j] = 0
         end
@@ -79,7 +79,7 @@ function Setup:draw()
 
     love.window.setTitle("Setup dos navios")
 
-    self:createGrid()
+    createGrid()
 
     love.audio.play(self.setupSong)
 
@@ -88,19 +88,6 @@ function Setup:draw()
     end
 
     self:showShipsToSet()
-
-end
-
-function Setup:createGrid(x, y)
-    x, y = x and x or 0, y and y or 0
-
-    love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 100))
-    for i = 1, grid.columnsQuantity do
-        for j = 1, grid.linesQuantity do
-            love.graphics.rectangle("fill", (i * 33) + x, (j * 33) + y, 32, 32, 2, 2)
-        end
-    end
-    love.graphics.setColor(1, 1, 1)
 
 end
 
