@@ -161,13 +161,9 @@ function Ship:getMatrixPosition()
 
     for i = 2, self.length do
         positions[i] = {}
-        if self.isUp then
-            positions[i].column = self.column
-            positions[i].line = self.line + (i - 1)
-        else
-            positions[i].column = self.column + (i - 1)
-            positions[i].line = self.line
-        end
+
+        positions[i].column = self.isUp and self.column or self.column + (i - 1)
+        positions[i].line = self.isUp and self.line + (i - 1) or self.line
     end
 
     return positions
