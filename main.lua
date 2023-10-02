@@ -46,7 +46,7 @@ function love.load()
         game = game
     }
 
-    currentScene = "setup"
+    currentScene = "mainGame"
 end
 
 function love.update(dt)

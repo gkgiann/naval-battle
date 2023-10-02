@@ -10,14 +10,6 @@ function Setup:new()
 
     self.setupSong:setLooping(true)
 
-    for i = 1, grid.columnsQuantity do
-        self.shipSetMatrix[i] = {}
-
-        for j = 1, grid.linesQuantity do
-            self.shipSetMatrix[i][j] = 0
-        end
-    end
-
     ships = {Ship(2), Ship(3), Ship(4), Ship(5)}
 end
 
@@ -135,4 +127,14 @@ function Setup:showKeyboardControls()
     love.graphics.draw(textSet, x, 430)
     love.graphics.draw(imgSet, x, 480)
 
+end
+
+function Setup:fillShipSetMatrix()
+    for i = 1, grid.columnsQuantity do
+        self.shipSetMatrix[i] = {}
+
+        for j = 1, grid.linesQuantity do
+            self.shipSetMatrix[i][j] = 0
+        end
+    end
 end

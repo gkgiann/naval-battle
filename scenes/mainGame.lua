@@ -35,8 +35,11 @@ function MainGame:update(dt)
     self.time = self.time + dt
 
     if love.keyboard.isDown("space") then
+        setup:fillShipSetMatrix()
+
         love.audio.stop(self.mainGameSong)
         love.audio.play(self.startGameEffect)
+
         currentScene = "setup"
     end
 
