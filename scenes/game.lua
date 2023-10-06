@@ -3,11 +3,11 @@ Game = Class:extend()
 function Game:new()
     self.gameSong = love.audio.newSource("sounds/game.mp3", "stream")
     self.gameSong:setLooping(true)
-    self.background = love.graphics.newImage("assets/game.jpg")
-
+    self.background = love.graphics.newImage("assets/backgrounds/game.jpg")
 end
 
 function Game:update(dt)
+
 end
 
 function Game:draw()

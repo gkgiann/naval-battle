@@ -2,7 +2,7 @@ Setup = Class:extend()
 
 function Setup:new()
     self.currentShipIndex = 1
-    self.setupBackground = love.graphics.newImage("assets/game.jpg")
+    self.setupBackground = love.graphics.newImage("assets/backgrounds/game.jpg")
     self.setupSong = love.audio.newSource("sounds/setup.mp3", "stream")
     self.time = 0
     self.setShipEffect = love.audio.newSource("sounds/startGame.wav", "static")

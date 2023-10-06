@@ -4,7 +4,7 @@ function MainGame:new()
     self.mainGameSong = love.audio.newSource("sounds/mainGame.mp3", "stream")
     self.startGameEffect = love.audio.newSource("sounds/startGame.wav", "static")
 
-    self.backgound = love.graphics.newImage("assets/mainGame.jpg")
+    self.backgound = love.graphics.newImage("assets/backgrounds/mainGame.jpg")
     self.backgoundPosition = windowHeight + 60
 
     self.navalBattleText = "BATALHA NAVAL"
