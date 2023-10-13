@@ -7,25 +7,33 @@ function Setup:new()
     self.time = 0
     self.setShipEffect = love.audio.newSource("sounds/startGame.wav", "static")
     self.shipSetMatrix = {}
+    self.computerShipSetMatrix = {}
 
     self.setupSong:setLooping(true)
 
-    ships = {Ship(2), Ship(3), Ship(4), Ship(5)}
+    playerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
+    computerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
+
+    -- playerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+    -- computerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+
 end
 
 function Setup:update(dt)
     self.time = self.time + dt
 
-    if not (self.currentShipIndex > #ships) then
-        currentShip = ships[self.currentShipIndex]
+    if not (self.currentShipIndex > #playerShips) then
+        currentShip = playerShips[self.currentShipIndex]
         currentShip.isCurrentSelected = true
 
-        for k, ship in pairs(ships) do
+        for k, ship in pairs(playerShips) do
             ship:update(dt)
         end
 
-        if self.time > 0.3 and self.currentShipIndex <= #ships and love.keyboard.isDown("return") then
+        if self.time > 0.3 and self.currentShipIndex <= #playerShips and love.keyboard.isDown("return") then
             if self:isPositionFree() then
+
+                self:setComputerShipPosition()
 
                 local shipMatrixPositions = currentShip:getMatrixPosition()
 
@@ -46,7 +54,7 @@ function Setup:update(dt)
             end
         end
     else
-        for k, ship in pairs(ships) do
+        for k, ship in pairs(playerShips) do
             ship.color.r, ship.color.g, ship.color.b = 0, 255, 0
         end
 
@@ -59,7 +67,6 @@ function Setup:update(dt)
 end
 
 function Setup:draw()
-
     love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 150))
     love.graphics.draw(self.setupBackground)
     love.graphics.setColor(1, 1, 1)
@@ -70,19 +77,18 @@ function Setup:draw()
 
     love.audio.play(self.setupSong)
 
-    for k, ship in pairs(ships) do
+    for k, ship in pairs(playerShips) do
         ship:draw()
     end
 
     self:showKeyboardControls()
     self:showShipsToSet()
-
 end
 
 function Setup:showShipsToSet()
     local i = 1
 
-    for k, ship in pairs(ships) do
+    for k, ship in pairs(playerShips) do
         if not ship.isSet then
             if ship.isCurrentSelected then
                 love.graphics.setColor(0, 1, 0)
@@ -99,6 +105,18 @@ function Setup:isPositionFree()
 
     for k, position in pairs(shipMatrixPositions) do
         if self.shipSetMatrix[position.column][position.line] == 1 then
+            return false
+        end
+    end
+
+    return true
+end
+
+function Setup:isComputerPositionFree()
+    local shipMatrixPositions = computerShips[self.currentShipIndex]:getMatrixPosition()
+
+    for k, position in pairs(shipMatrixPositions) do
+        if self.computerShipSetMatrix[position.column][position.line] == 1 then
             return false
         end
     end
@@ -132,9 +150,55 @@ end
 function Setup:fillShipSetMatrix()
     for i = 1, grid.columnsQuantity do
         self.shipSetMatrix[i] = {}
+        self.computerShipSetMatrix[i] = {}
 
         for j = 1, grid.linesQuantity do
             self.shipSetMatrix[i][j] = 0
+            self.computerShipSetMatrix[i][j] = 0
         end
     end
 end
+
+function Setup:setComputerShipPosition()
+    local x, y, isUp = self:randomPosition(computerShips[self.currentShipIndex].length)
+
+    computerShips[self.currentShipIndex].line = y
+    computerShips[self.currentShipIndex].column = x
+    computerShips[self.currentShipIndex].isUp = isUp
+
+    if not self:isComputerPositionFree() then
+        self:setComputerShipPosition()
+    end
+
+    local shipMatrixPositions = computerShips[self.currentShipIndex]:getMatrixPosition()
+
+    for k, position in pairs(shipMatrixPositions) do
+        self.computerShipSetMatrix[position.column][position.line] = 1
+    end
+
+end
+
+function Setup:randomPosition(shipLength)
+    local isUp = love.math.random(2) == 1 and true or false
+    local x, y = 0, 0
+
+    if isUp then
+        x = love.math.random(grid.columnsQuantity)
+        y = love.math.random(grid.linesQuantity - shipLength)
+    else
+        x = love.math.random(grid.columnsQuantity - shipLength)
+        y = love.math.random(grid.linesQuantity)
+    end
+
+    return x, y, isUp
+end
+
+-- function Setup:reset()
+--     self.currentShipIndex = 1
+--     self.time = 0
+--     self.shipSetMatrix = {}
+--     self.computerShipSetMatrix = {}
+
+--     playerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+--     computerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+-- end

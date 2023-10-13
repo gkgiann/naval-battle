@@ -7,7 +7,9 @@ function Game:new()
 end
 
 function Game:update(dt)
-
+    for k, ship in pairs(computerShips) do
+        ship:update(dt)
+    end
 end
 
 function Game:draw()
@@ -19,8 +21,13 @@ function Game:draw()
     love.window.setTitle("Batalha Naval")
 
     -- TABULEIRO DO JOGADOR
-    createGrid(-30, -30)
+    createGrid()
 
     -- TABULEIRO DA MÁQUINA
     createGrid(windowWidth - (grid.columnsQuantity * 40) - 45, -30)
+
+    for k, ship in pairs(computerShips) do
+        ship.isCurrentSelected = true
+        ship:draw()
+    end
 end
