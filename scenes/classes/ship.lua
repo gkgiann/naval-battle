@@ -1,6 +1,7 @@
 Ship = Class:extend()
 
 function Ship:new(len)
+    self.isComputerShip = false
     self.line = 1
     self.column = 1
     self.isUp = false
@@ -23,7 +24,7 @@ function Ship:update(dt)
         self.color.r, self.color.g, self.color.b = 1, 1, 1
     end
 
-    if self.isCurrentSelected then
+    if self.isCurrentSelected and not self.isComputerShip then
         self:move(dt)
     end
 end
@@ -37,11 +38,16 @@ function Ship:draw()
         end
 
         local plus = self.length < 5 and self.length * self.length or (self.length * self.length) - 8
+        local marginX = self.isComputerShip and (40 * grid.columnsQuantity) + 54 or 0
+
+        if grid.columnsQuantity == 12 and self.isComputerShip then
+            marginX = marginX + 240
+        end
 
         if self.isUp then
-            love.graphics.draw(self.img, (40 * self.column) + 35, (40 * self.line) + plus, math.rad(90))
+            love.graphics.draw(self.img, ((40 * self.column) + 35) + marginX, (40 * self.line) + plus, math.rad(90))
         else
-            love.graphics.draw(self.img, (40 * self.column) + plus, (40 * self.line) + 2, 0)
+            love.graphics.draw(self.img, ((40 * self.column) + plus) + marginX, (40 * self.line) + 2, 0)
         end
     end
 

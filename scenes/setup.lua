@@ -17,6 +17,10 @@ function Setup:new()
     -- playerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
     -- computerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
 
+    for k, ship in pairs(computerShips) do
+        ship.isComputerShip = true
+    end
+
 end
 
 function Setup:update(dt)
