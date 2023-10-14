@@ -24,7 +24,7 @@ function Game:draw()
     createGrid()
 
     -- TABULEIRO DA MÁQUINA
-    createGrid(windowWidth - (grid.columnsQuantity * 40) - 80)
+    createGrid(computerGridPositionX)
 
     for k, ship in pairs(computerShips) do
         ship.isCurrentSelected = true

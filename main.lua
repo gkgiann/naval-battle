@@ -35,6 +35,8 @@ function love.load()
         linesQuantity = 8
     }
 
+    computerGridPositionX = windowWidth - (grid.columnsQuantity * 40) - 80
+
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()
     mainGame = MainGame()
