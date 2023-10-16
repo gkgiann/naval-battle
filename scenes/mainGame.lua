@@ -36,6 +36,9 @@ function MainGame:update(dt)
 
     if love.keyboard.isDown("space") then
         setup:fillShipSetMatrix()
+        game:fillUsedPositions()
+
+        computerGridPositionX = windowWidth - (grid.columnsQuantity * 40) - 80
 
         love.audio.stop(self.mainGameSong)
         love.audio.play(self.startGameEffect)

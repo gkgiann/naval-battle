@@ -9,6 +9,7 @@ function love.load()
     require "scenes/game"
     require "scenes/mainGame"
     require "scenes/classes/ship"
+    require "scenes/classes/cursor"
     require 'lib.sqlite3'
 
     -- TAMANHO DA JANELA
@@ -35,7 +36,6 @@ function love.load()
         linesQuantity = 8
     }
 
-    computerGridPositionX = windowWidth - (grid.columnsQuantity * 40) - 80
 
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()
