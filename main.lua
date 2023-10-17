@@ -9,7 +9,9 @@ function love.load()
     require "scenes/game"
     require "scenes/mainGame"
     require "scenes/classes/ship"
-    require "scenes/classes/cursor"
+    require "scenes/classes/target"
+    require "scenes/classes/specialTarget"
+    require "scenes/classes/shot"
     require 'lib.sqlite3'
 
     -- TAMANHO DA JANELA
@@ -20,6 +22,8 @@ function love.load()
     -- EFEITOS SONOROS
     wrongEffect = love.audio.newSource("sounds/wrong.wav", "static")
     moveShipEffect = love.audio.newSource("sounds/moveShip.mp3", "static")
+    initialHitEffect = love.audio.newSource("sounds/hit0.wav", "static")
+    hitEffect = love.audio.newSource("sounds/hit.wav", "static")
 
     -- FONTES
     font20 = love.graphics.newFont("fonts/wheatonCapitals.otf", 20)
@@ -35,7 +39,6 @@ function love.load()
         columnsQuantity = 12,
         linesQuantity = 8
     }
-
 
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()

@@ -6,9 +6,12 @@ function Game:new()
     self.background = love.graphics.newImage("assets/backgrounds/game.jpg")
 
     self.usedPlayerPositions = {}
+
     self.usedComputerPositions = {}
-    self.playerCursor = Cursor(true)
-    -- self.computerCursor = Cursor()
+
+    self.playerShot = Shot(true)
+    self.computerShot = Shot()   
+
 end
 
 function Game:update(dt)
@@ -20,8 +23,8 @@ function Game:update(dt)
         ship:update(dt)
     end
 
-    self.playerCursor:update(dt)
-    -- self.computerCursor:update(dt)
+    self.playerShot:update(dt)
+    -- self.computerTarget:update(dt)
 
 end
 
@@ -60,12 +63,12 @@ function Game:draw()
     end
 
     for k, ship in pairs(computerShips) do
-        -- ship.isCurrentSelected = true
+        ship.isCurrentSelected = true
         ship:draw()
     end
 
-    self.playerCursor:draw()
-    -- self.computerCursor:draw()
+    self.playerShot:draw()
+    -- self.computerTarget:draw()
 
     self:showShipsToDestroy()
 end

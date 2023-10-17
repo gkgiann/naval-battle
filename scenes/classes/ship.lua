@@ -27,7 +27,7 @@ end
 function Ship:update(dt)
     self.time = self.time + dt
 
-    if self.time > 0.6 then
+    if self.time > 0.25 then
         self.color.r, self.color.g, self.color.b = 1, 1, 1
     end
 
