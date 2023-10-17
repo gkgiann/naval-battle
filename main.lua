@@ -58,6 +58,7 @@ function love.update(dt)
     scenes[currentScene]:update(dt)
 
     if love.keyboard.isDown("q") then
+        love.window.close()
         love.event.quit()
     end
 
