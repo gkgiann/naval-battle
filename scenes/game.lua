@@ -10,7 +10,7 @@ function Game:new()
     self.usedComputerPositions = {}
 
     self.playerShot = Shot(true)
-    self.computerShot = Shot()   
+    self.computerShot = Shot()
 
 end
 
@@ -29,7 +29,6 @@ function Game:update(dt)
 end
 
 function Game:draw()
-
     love.graphics.setColor(love.math.colorFromBytes(50, 200, 255, 150))
     love.graphics.draw(self.background)
     love.graphics.setColor(1, 1, 1)
@@ -46,10 +45,11 @@ function Game:draw()
     computerShips[1].destroyedParts[1] = true
     computerShips[1].destroyedParts[2] = true
 
-    computerShips[3].destroyedParts[1] = true
+    -- computerShips[3].destroyedParts[1] = true
     -- computerShips[3].destroyedParts[2] = true
-    computerShips[3].destroyedParts[3] = true
+    -- computerShips[3].destroyedParts[3] = true
     -- computerShips[3].destroyedParts[4] = true
+    computerShips[7].destroyedParts[3] = true
 
     self:verifyUsedPositions()
 
@@ -63,13 +63,14 @@ function Game:draw()
     end
 
     for k, ship in pairs(computerShips) do
-        ship.isCurrentSelected = true
+        -- ship.isCurrentSelected = true
         ship:draw()
     end
 
     self.playerShot:draw()
     -- self.computerTarget:draw()
 
+    self:showKeyboardControls()
     self:showShipsToDestroy()
 end
 
@@ -104,15 +105,83 @@ function Game:verifyUsedPositions()
 end
 
 function Game:showShipsToDestroy()
-    local i = 1
+    local marginTop = grid.columnsQuantity == 12 and 360 or 430
 
-    for k, ship in pairs(computerShips) do
+    local i = 1
+    local marginLeft = 40
+
+    for i = 1, 4 do
+        local ship = computerShips[i]
         if ship:isShipDestroyed() then
             love.graphics.setColor(1, 0, 0)
         end
 
-        love.graphics.draw(ship.img, (grid.columnsQuantity + 2) * 40, i * 44)
+        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (i * 44) + marginTop)
         love.graphics.setColor(1, 1, 1)
-        i = i + 1
     end
+
+    marginLeft = marginLeft + 80
+
+    local heightI = 1
+    for p = 5, 7 do
+        local ship = computerShips[p]
+        if ship:isShipDestroyed() then
+            love.graphics.setColor(1, 0, 0)
+        end
+
+        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
+        love.graphics.setColor(1, 1, 1)
+
+        heightI = heightI + 1
+    end
+
+    marginLeft = marginLeft + 110
+
+    heightI = 1
+    for i = 8, 9 do
+        local ship = computerShips[i]
+        if ship:isShipDestroyed() then
+            love.graphics.setColor(1, 0, 0)
+        end
+
+        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
+        love.graphics.setColor(1, 1, 1)
+        heightI = heightI + 1
+    end
+
+    marginLeft = marginLeft + 140
+
+    local ship = computerShips[10]
+    if ship:isShipDestroyed() then
+        love.graphics.setColor(1, 0, 0)
+    end
+
+    love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (1 * 44) + marginTop)
+    love.graphics.setColor(1, 1, 1)
+end
+
+function Game:showKeyboardControls()
+    local x = 40
+    local y = grid.columnsQuantity == 12 and 400 or 470
+
+    local textRotate = love.graphics.newText(font20, "Ataque especial")
+    local imgRotate = love.graphics.newImage('assets/keyboard/shift.png')
+
+    local text = string.format('Ataques especiais: %d', self.playerShot.specialAttackCount)
+    local textSpecialAttackCount = love.graphics.newText(font20, text)
+
+    love.graphics.draw(textSpecialAttackCount, x + 320, y)
+
+    love.graphics.draw(textRotate, x, y)
+    y = y - 5
+    love.graphics.draw(imgRotate, x, y)
+    y = y + 130
+
+    local textSet = love.graphics.newText(font20, "Confirmar ataque")
+    local imgSet = love.graphics.newImage('assets/keyboard/enter.png')
+
+    love.graphics.draw(textSet, x, y)
+    y = y + 20
+    love.graphics.draw(imgSet, x, y)
+
 end
