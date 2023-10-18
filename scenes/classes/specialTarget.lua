@@ -139,6 +139,17 @@ function SpecialTarget:verifyIfHitShip()
 
     for k, position in pairs(targetPositions) do
         for k, pos in pairs(position) do
+
+            for k, ship in pairs(computerShips) do
+                local shipPositions = ship:getMatrixPosition()
+
+                for i, position in ipairs(shipPositions) do
+                    if pos.col == position.column and pos.line == position.line then
+                        ship.destroyedParts[i] = true
+                    end
+                end
+            end
+
             usedPositions[pos.col][pos.line] = 1
         end
     end

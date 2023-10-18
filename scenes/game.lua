@@ -63,7 +63,7 @@ function Game:draw()
     end
 
     for k, ship in pairs(computerShips) do
-        ship.isCurrentSelected = true
+        -- ship.isCurrentSelected = true
         ship:draw()
     end
 
