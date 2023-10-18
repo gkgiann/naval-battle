@@ -1,3 +1,0 @@
-[x] audio de bomba
-[] fazer o spacialTarget
-[] ajeitar o verifyIfHitShip

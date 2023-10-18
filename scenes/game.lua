@@ -42,14 +42,14 @@ function Game:draw()
     -- TABULEIRO DA MÁQUINA
     createGrid(computerGridPositionX)
 
-    computerShips[1].destroyedParts[1] = true
-    computerShips[1].destroyedParts[2] = true
+    -- computerShips[1].destroyedParts[1] = true
+    -- computerShips[1].destroyedParts[2] = true
 
     -- computerShips[3].destroyedParts[1] = true
     -- computerShips[3].destroyedParts[2] = true
     -- computerShips[3].destroyedParts[3] = true
     -- computerShips[3].destroyedParts[4] = true
-    computerShips[7].destroyedParts[3] = true
+    -- computerShips[7].destroyedParts[3] = true
 
     self:verifyUsedPositions()
 
@@ -63,7 +63,7 @@ function Game:draw()
     end
 
     for k, ship in pairs(computerShips) do
-        -- ship.isCurrentSelected = true
+        ship.isCurrentSelected = true
         ship:draw()
     end
 
