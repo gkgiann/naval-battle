@@ -5,8 +5,9 @@ function Game:new()
     self.gameSong:setLooping(true)
     self.background = love.graphics.newImage("assets/backgrounds/game.jpg")
 
-    self.usedPlayerPositions = {}
+    self.turn = "player"
 
+    self.usedPlayerPositions = {}
     self.usedComputerPositions = {}
 
     self.computerShipsPosition = {}
@@ -17,17 +18,19 @@ function Game:new()
 end
 
 function Game:update(dt)
-    for k, ship in pairs(computerShips) do
-        ship:update(dt)
+    if self.turn == "player" then
+        for k, ship in pairs(playerShips) do
+            ship:update(dt)
+        end
+
+        self.playerShot:update(dt)
+    else
+        for k, ship in pairs(computerShips) do
+            ship:update(dt)
+        end
+
+        self.computerShot:update(dt)
     end
-
-    for k, ship in pairs(playerShips) do
-        ship:update(dt)
-    end
-
-    self.playerShot:update(dt)
-    -- self.computerTarget:update(dt)
-
 end
 
 function Game:draw()
@@ -38,39 +41,25 @@ function Game:draw()
     love.audio.play(self.gameSong)
     love.window.setTitle("Batalha Naval")
 
-    -- TABULEIRO DO JOGADOR
     createGrid()
-
-    -- TABULEIRO DA MÁQUINA
     createGrid(computerGridPositionX)
 
-    -- computerShips[1].destroyedParts[1] = true
-    -- computerShips[1].destroyedParts[2] = true
-
-    -- computerShips[3].destroyedParts[1] = true
-    -- computerShips[3].destroyedParts[2] = true
-    -- computerShips[3].destroyedParts[3] = true
-    -- computerShips[3].destroyedParts[4] = true
-    -- computerShips[7].destroyedParts[3] = true
-
     self:verifyUsedPositions()
-
-    -- self.usedPlayerPositions[1][1] = 1
-    -- self.usedComputerPositions[1][1] = 1
-
-    for k, ship in pairs(playerShips) do
-        ship.moveBlocked, ship.isCurrentSelected = true, true
-        ship.isSet = false
-        ship:draw()
-    end
 
     for k, ship in pairs(computerShips) do
         ship.isCurrentSelected = true
         ship:draw()
     end
 
+    for k, ship in pairs(playerShips) do
+        ship.moveBlocked = true
+        ship.isCurrentSelected = true
+        ship.isSet = false
+        ship:draw()
+    end
+
     self.playerShot:draw()
-    -- self.computerTarget:draw()
+    self.computerShot:draw()
 
     self:showKeyboardControls()
     self:showShipsToDestroy()

@@ -17,7 +17,7 @@ function Target:update(dt)
         self.color = {1, 1, 0}
     end
 
-    if self.isCurrentSelected and not self.isSet then
+    if self.isPlayerTarget and self.isCurrentSelected and not self.isSet then
         self:move()
     end
 end

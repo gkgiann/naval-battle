@@ -15,7 +15,7 @@ end
 function Shot:update(dt)
     self.time = self.time + dt
 
-    if self.time > 0.3 and (love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift")) then
+    if self.isPlayerShot and self.time > 0.3 and (love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift")) then
         if self.specialAttackCount > 0 then
             self.isSpecial = not self.isSpecial
             love.audio.play(moveShipEffect)
@@ -27,7 +27,7 @@ function Shot:update(dt)
     if self.isSpecial then
         self.specialTarget:update(dt)
 
-        if self.time > 0.25 and not self.specialTarget.isSet and love.keyboard.isDown("return") then
+        if self.isPlayerShot and self.time > 0.25 and not self.specialTarget.isSet and love.keyboard.isDown("return") then
             self.specialTarget.isSet = true
             self.time = 0
             love.audio.play(initialHitEffect)
@@ -43,6 +43,7 @@ function Shot:update(dt)
 
             self.time = 0
             self.isSpecial = false
+            game.turn = self.isPlayerShot and "comp" or "player"
         end
 
     else
@@ -52,7 +53,8 @@ function Shot:update(dt)
 
             currentTarget:update(dt)
 
-            if self.time > 0.3 and self.currentTargetIndex <= #self.targets and love.keyboard.isDown("return") then
+            if self.isPlayerShot and self.time > 0.3 and self.currentTargetIndex <= #self.targets and
+                love.keyboard.isDown("return") then
 
                 if currentTarget:isPositionFree() then
                     self.currentTargetIndex = self.currentTargetIndex + 1
@@ -77,6 +79,8 @@ function Shot:update(dt)
                 self:reset()
 
                 self.time = 0
+
+                game.turn = self.isPlayerShot and "comp" or "player"
             end
         end
     end
