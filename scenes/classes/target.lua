@@ -100,14 +100,19 @@ end
 
 function Target:verifyIfHitShip()
     local usedPositions = self.isPlayerTarget and game.usedComputerPositions or game.usedPlayerPositions
+    local ships = self.isPlayerTarget and computerShips or playerShips
+    local shipsMatrix = self.isPlayerTarget and game.computerShipsPosition or game.playerShipsPosition
 
-    for k, ship in pairs(computerShips) do
-        local shipPositions = ship:getMatrixPosition()
+    if shipsMatrix[self.column][self.line] == 1 then
+        for k, ship in pairs(ships) do
+            local shipPositions = ship:getMatrixPosition()
 
-        for i, position in ipairs(shipPositions) do
-            if self.column == position.column and self.line == position.line then
-                ship.destroyedParts[i] = true
-                return
+            for i, position in ipairs(shipPositions) do
+                if self.column == position.column and self.line == position.line then
+                    ship.destroyedParts[i] = true
+                    usedPositions[self.column][self.line] = 2
+                    return
+                end
             end
         end
     end

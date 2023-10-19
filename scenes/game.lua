@@ -9,9 +9,11 @@ function Game:new()
 
     self.usedComputerPositions = {}
 
+    self.computerShipsPosition = {}
+    self.playerShipsPosition = {}
+
     self.playerShot = Shot(true)
     self.computerShot = Shot()
-
 end
 
 function Game:update(dt)
@@ -63,7 +65,7 @@ function Game:draw()
     end
 
     for k, ship in pairs(computerShips) do
-        -- ship.isCurrentSelected = true
+        ship.isCurrentSelected = true
         ship:draw()
     end
 
@@ -82,6 +84,34 @@ function Game:fillUsedPositions()
         for j = 1, grid.linesQuantity do
             self.usedPlayerPositions[i][j] = 0
             self.usedComputerPositions[i][j] = 0
+        end
+    end
+end
+
+function Game:fillShipsPosition()
+    for i = 1, grid.columnsQuantity do
+        self.computerShipsPosition[i] = {}
+        self.playerShipsPosition[i] = {}
+
+        for j = 1, grid.linesQuantity do
+            self.computerShipsPosition[i][j] = 0
+            self.playerShipsPosition[i][j] = 0
+        end
+    end
+
+    for k, ship in pairs(computerShips) do
+        local shipPositions = ship:getMatrixPosition()
+
+        for i, position in ipairs(shipPositions) do
+            self.computerShipsPosition[position.column][position.line] = 1
+        end
+    end
+
+    for k, ship in pairs(playerShips) do
+        local shipPositions = ship:getMatrixPosition()
+
+        for i, position in ipairs(shipPositions) do
+            self.playerShipsPosition[position.column][position.line] = 1
         end
     end
 end

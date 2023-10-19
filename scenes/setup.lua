@@ -63,6 +63,7 @@ function Setup:update(dt)
         end
 
         if self.time > 2 then
+            game:fillShipsPosition()
             currentScene = "game"
             love.audio.stop()
         end

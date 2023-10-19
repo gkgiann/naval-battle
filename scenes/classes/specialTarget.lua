@@ -135,22 +135,26 @@ end
 
 function SpecialTarget:verifyIfHitShip()
     local usedPositions = self.isPlayerSpecialTarget and game.usedComputerPositions or game.usedPlayerPositions
+    local ships = self.isPlayerSpecialTarget and computerShips or playerShips
+    local shipsMatrix = self.isPlayerSpecialTarget and game.computerShipsPosition or game.playerShipsPosition
     local targetPositions = self:getSpecialTargetsPosition()
 
-    for k, position in pairs(targetPositions) do
-        for k, pos in pairs(position) do
+    for k, targetPosition in pairs(targetPositions) do
+        for k, pos in pairs(targetPosition) do
+            if shipsMatrix[pos.col][pos.line] == 1 then
+                for k, ship in pairs(ships) do
+                    local shipPositions = ship:getMatrixPosition()
 
-            for k, ship in pairs(computerShips) do
-                local shipPositions = ship:getMatrixPosition()
-
-                for i, position in ipairs(shipPositions) do
-                    if pos.col == position.column and pos.line == position.line then
-                        ship.destroyedParts[i] = true
+                    for i, position in ipairs(shipPositions) do
+                        if pos.col == position.column and pos.line == position.line then
+                            usedPositions[pos.col][pos.line] = 2
+                            ship.destroyedParts[i] = true
+                        end
                     end
                 end
+            else
+                usedPositions[pos.col][pos.line] = 1
             end
-
-            usedPositions[pos.col][pos.line] = 1
         end
     end
 end
