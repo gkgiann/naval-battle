@@ -8,6 +8,7 @@ function love.load()
     require "scenes/setup"
     require "scenes/game"
     require "scenes/mainGame"
+    require "scenes/endGame"
     require "scenes/classes/ship"
     require "scenes/classes/target"
     require "scenes/classes/specialTarget"
@@ -29,6 +30,7 @@ function love.load()
     font20 = love.graphics.newFont("fonts/wheatonCapitals.otf", 20)
     font30 = love.graphics.newFont("fonts/wheatonCapitals.otf", 30)
     font40 = love.graphics.newFont("fonts/wheatonCapitals.otf", 40)
+    font50 = love.graphics.newFont("fonts/wheatonCapitals.otf", 50)
     font90 = love.graphics.newFont("fonts/wheatonCapitals.otf", 90)
     love.graphics.setFont(font20)
 
@@ -44,11 +46,13 @@ function love.load()
     setup = Setup()
     mainGame = MainGame()
     game = Game()
+    endGame = EndGame()
 
     scenes = {
         mainGame = mainGame,
         setup = setup,
-        game = game
+        game = game,
+        endGame = endGame
     }
 
     currentScene = "mainGame"

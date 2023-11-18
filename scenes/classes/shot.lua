@@ -36,6 +36,7 @@ function Shot:update(dt)
         if self.time > 2 and self.specialTarget.isSet then
             self.specialTarget:verifyIfHitShip()
             love.audio.play(hitEffect)
+            game.playerStatistics.shots = game.playerStatistics.shots + 9
 
             self.specialAttackCount = self.specialAttackCount - 1
 
@@ -43,6 +44,7 @@ function Shot:update(dt)
 
             self.time = 0
             self.isSpecial = false
+
             game.turn = self.isPlayerShot and "comp" or "player"
         end
 
@@ -93,6 +95,7 @@ function Shot:hit(dt)
         if self.time > 1 and self.iTimeControl <= 3 then
             self.targets[self.iTimeControl]:verifyIfHitShip()
             love.audio.play(hitEffect)
+            game.playerStatistics.shots = game.playerStatistics.shots + 1
 
             self.time = 0
             self.iTimeControl = self.iTimeControl + 1

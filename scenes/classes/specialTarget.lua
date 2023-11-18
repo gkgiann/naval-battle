@@ -149,6 +149,12 @@ function SpecialTarget:verifyIfHitShip()
                         if pos.col == position.column and pos.line == position.line then
                             usedPositions[pos.col][pos.line] = 2
                             ship.destroyedParts[i] = true
+
+                            if self.isPlayerSpecialTarget then
+                                game.playerStatistics.hits = game.playerStatistics.hits + 1
+                            else
+                                game.computerHits = game.computerHits + 1
+                            end
                         end
                     end
                 end

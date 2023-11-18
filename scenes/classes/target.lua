@@ -111,6 +111,13 @@ function Target:verifyIfHitShip()
                 if self.column == position.column and self.line == position.line then
                     ship.destroyedParts[i] = true
                     usedPositions[self.column][self.line] = 2
+
+                    if self.isPlayerTarget then
+                        game.playerStatistics.hits = game.playerStatistics.hits + 1
+                    else
+                        game.computerHits = game.computerHits + 1
+                    end
+
                     return
                 end
             end
