@@ -15,15 +15,29 @@ function Game:new()
 
     self.playerShot = Shot(true)
     self.computerShot = Shot()
+    self.time = 0
+    self.computerShotReseted = true
 end
 
 function Game:update(dt)
+    self.time = self.time + dt
+
+    if not self.computerShotReseted and self.time > 2.5 and self.turn == "player" then
+        love.audio.play(hitEffect)
+        self.computerShot:reset()
+        self.time = 0
+        self.computerShotReseted = true
+    end
+
     if self.turn == "player" then
         for k, ship in pairs(playerShips) do
             ship:update(dt)
         end
 
-        self.playerShot:update(dt)
+        if self.time > 2 then
+            self.playerShot:update(dt)
+        end
+
     else
         for k, ship in pairs(computerShips) do
             ship:update(dt)
@@ -58,11 +72,27 @@ function Game:draw()
         ship:draw()
     end
 
+    if self.turn ~= "player" then
+        if self.computerShot.specialAttackCount > 0 then
+            self.computerShot.isSpecial = true
+            self:computerPlay()
+            self.computerShot.specialAttackCount = self.computerShot.specialAttackCount - 1
+        else
+            self:computerPlay(1)
+            self:computerPlay(2)
+            self:computerPlay(3)
+        end
+
+        self.computerShotReseted = false
+        self.turn = "player"
+        self.time = 0
+    end
+
     self.playerShot:draw()
     self.computerShot:draw()
 
     self:showKeyboardControls()
-    self:showShipsToDestroy()
+    -- self:showShipsToDestroy()
 end
 
 function Game:fillUsedPositions()
@@ -123,61 +153,61 @@ function Game:verifyUsedPositions()
     end
 end
 
-function Game:showShipsToDestroy()
-    local marginTop = grid.columnsQuantity == 12 and 360 or 430
+-- function Game:showShipsToDestroy()
+--     local marginTop = grid.columnsQuantity == 12 and 360 or 430
 
-    local i = 1
-    local marginLeft = 40
+--     local i = 1
+--     local marginLeft = 40
 
-    for i = 1, 4 do
-        local ship = computerShips[i]
-        if ship:isShipDestroyed() then
-            love.graphics.setColor(1, 0, 0)
-        end
+--     for i = 1, 4 do
+--         local ship = computerShips[i]
+--         if ship:isShipDestroyed() then
+--             love.graphics.setColor(1, 0, 0)
+--         end
 
-        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (i * 44) + marginTop)
-        love.graphics.setColor(1, 1, 1)
-    end
+--         love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (i * 44) + marginTop)
+--         love.graphics.setColor(1, 1, 1)
+--     end
 
-    marginLeft = marginLeft + 80
+--     marginLeft = marginLeft + 80
 
-    local heightI = 1
-    for p = 5, 7 do
-        local ship = computerShips[p]
-        if ship:isShipDestroyed() then
-            love.graphics.setColor(1, 0, 0)
-        end
+--     local heightI = 1
+--     for p = 5, 7 do
+--         local ship = computerShips[p]
+--         if ship:isShipDestroyed() then
+--             love.graphics.setColor(1, 0, 0)
+--         end
 
-        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
-        love.graphics.setColor(1, 1, 1)
+--         love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
+--         love.graphics.setColor(1, 1, 1)
 
-        heightI = heightI + 1
-    end
+--         heightI = heightI + 1
+--     end
 
-    marginLeft = marginLeft + 110
+--     marginLeft = marginLeft + 110
 
-    heightI = 1
-    for i = 8, 9 do
-        local ship = computerShips[i]
-        if ship:isShipDestroyed() then
-            love.graphics.setColor(1, 0, 0)
-        end
+--     heightI = 1
+--     for i = 8, 9 do
+--         local ship = computerShips[i]
+--         if ship:isShipDestroyed() then
+--             love.graphics.setColor(1, 0, 0)
+--         end
 
-        love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
-        love.graphics.setColor(1, 1, 1)
-        heightI = heightI + 1
-    end
+--         love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (heightI * 44) + marginTop)
+--         love.graphics.setColor(1, 1, 1)
+--         heightI = heightI + 1
+--     end
 
-    marginLeft = marginLeft + 140
+--     marginLeft = marginLeft + 140
 
-    local ship = computerShips[10]
-    if ship:isShipDestroyed() then
-        love.graphics.setColor(1, 0, 0)
-    end
+--     local ship = computerShips[10]
+--     if ship:isShipDestroyed() then
+--         love.graphics.setColor(1, 0, 0)
+--     end
 
-    love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (1 * 44) + marginTop)
-    love.graphics.setColor(1, 1, 1)
-end
+--     love.graphics.draw(ship.img, computerGridPositionX + marginLeft, (1 * 44) + marginTop)
+--     love.graphics.setColor(1, 1, 1)
+-- end
 
 function Game:showKeyboardControls()
     local x = 40
@@ -202,5 +232,38 @@ function Game:showKeyboardControls()
     love.graphics.draw(textSet, x, y)
     y = y + 20
     love.graphics.draw(imgSet, x, y)
+
+end
+
+function Game:computerPlay(targetIndex)
+    local index = targetIndex and targetIndex or nil
+    local x, y = self:randomShotPosition(not index)
+
+    if index ~= nil then
+        self.computerShot:setShotPosition(x, y, targetIndex)
+        self.computerShot:confirmShot(targetIndex)
+    else
+        self.computerShot:setShotPosition(x, y)
+        self.computerShot:confirmShot()
+    end
+
+end
+
+function Game:randomShotPosition(isSpecialTarget)
+    local minus = isSpecialTarget and 2 or 0
+    local x = love.math.random(grid.linesQuantity - minus)
+    local y = love.math.random(grid.columnsQuantity - minus)
+
+    if self.usedPlayerPositions[y][x] > 0 then
+
+        if self.usedPlayerPositions[y][x] == 2 then
+            -- verificar quais lados dessa posição pode ser jogada
+            -- y + 1 || y - 1 e x + 1 || x - 1 
+        end
+
+        return self:randomShotPosition(isSpecialTarget)
+    end
+
+    return x, y
 
 end

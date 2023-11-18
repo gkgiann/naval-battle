@@ -65,14 +65,15 @@ function Ship:draw()
         if isPartDestroyed then
 
             local alpha = isAllDestroyed and 150 or 230
+            local gridPosition = self.isComputerShip and computerGridPositionX or 0
 
             love.graphics.setColor(love.math.colorFromBytes(255, 0, 0, alpha))
 
             if self.isUp then
-                love.graphics.rectangle("fill", self.column * 40 + computerGridPositionX, (self.line + (k - 1)) * 40,
+                love.graphics.rectangle("fill", self.column * 40 + gridPosition, (self.line + (k - 1)) * 40,
                     38, 38, 2, 2)
             else
-                love.graphics.rectangle("fill", (self.column + (k - 1)) * 40 + computerGridPositionX, self.line * 40,
+                love.graphics.rectangle("fill", (self.column + (k - 1)) * 40 + gridPosition, self.line * 40,
                     38, 38, 2, 2)
             end
 
