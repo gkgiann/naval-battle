@@ -14,6 +14,8 @@ function Game:new()
 
     self.computerHits = 0
 
+    self.firedPositions = {}
+
     self.usedPlayerPositions = {}
     self.usedComputerPositions = {}
 
@@ -107,9 +109,14 @@ function Game:draw()
             self:computerPlay()
             self.computerShot.specialAttackCount = self.computerShot.specialAttackCount - 1
         else
-            self:computerPlay(1)
-            self:computerPlay(2)
-            self:computerPlay(3)
+            for i = 1, 3 do
+                local x, y = self:randomShotPosition(true)
+                self.computerShot:setShotPosition(x, y, i)
+            end
+
+            for i = 1, 3 do
+                self.computerShot:confirmShot(i)
+            end
         end
 
         self.computerShotReseted = false
@@ -121,7 +128,7 @@ function Game:draw()
     self.computerShot:draw()
 
     self:showKeyboardControls()
-    self:showShipsToDestroy()
+    -- self:showShipsToDestroy()
 end
 
 function Game:fillUsedPositions()
@@ -264,33 +271,47 @@ function Game:showKeyboardControls()
 
 end
 
-function Game:computerPlay(targetIndex)
-    local index = targetIndex and targetIndex or nil
-    local x, y = self:randomShotPosition(not index)
+function Game:computerPlay()
+    local x, y = self:randomShotPosition(false)
 
-    if index ~= nil then
-        self.computerShot:setShotPosition(x, y, targetIndex)
-        self.computerShot:confirmShot(targetIndex)
-    else
-        self.computerShot:setShotPosition(x, y)
-        self.computerShot:confirmShot()
-    end
+    self.computerShot:setShotPosition(x, y)
+    self.computerShot:confirmShot()
 
 end
 
 function Game:randomShotPosition(isSpecialTarget)
+    -- antes de gerar posições aleatórias, 
+    -- olhar se não existe algum navio parcialmente destruído
+
+    if not isSpecialTarget and #self.firedPositions > 0 then
+        local randomIndex = love.math.random(#self.firedPositions)
+        local randomFiredPosition = self.firedPositions[randomIndex]
+
+        local x, y = randomFiredPosition.col, randomFiredPosition.line
+        local freePositions, i = {}, 1
+
+        -- logica aqui
+        if y < grid.columnsQuantity and self.usedPlayerPositions[x][y + 1] == 0 then
+            freePositions[i] = {
+                col = y + 1,
+                line = x
+            }
+            i = i + 1
+        end
+
+        if #freePositions > 0 then
+            randomIndex = love.math.random(#freePositions)
+            local position = freePositions[randomIndex]
+
+            return position.col, position.line
+        end
+    end
+
     local minus = isSpecialTarget and 2 or 0
     local x = love.math.random(grid.linesQuantity - minus)
     local y = love.math.random(grid.columnsQuantity - minus)
 
     if self.usedPlayerPositions[y][x] > 0 then
-
-        if self.usedPlayerPositions[y][x] == 2 then
-            -- parte da "IA" para a máquina não fazer jogadas puramente aleatórias
-
-            -- verificar quais lados dessa posição pode ser jogada
-            -- y + 1 || y - 1 e x + 1 || x - 1 
-        end
 
         return self:randomShotPosition(isSpecialTarget)
     end

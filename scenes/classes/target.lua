@@ -116,6 +116,10 @@ function Target:verifyIfHitShip()
                         game.playerStatistics.hits = game.playerStatistics.hits + 1
                     else
                         game.computerHits = game.computerHits + 1
+                        game.firedPositions[#game.firedPositions + 1] = {
+                            col = self.column,
+                            line = self.line
+                        }
                     end
 
                     return
