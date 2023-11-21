@@ -41,6 +41,18 @@ function Ship:draw()
 
     local isAllDestroyed = self:isShipDestroyed()
 
+    if isAllDestroyed then
+        local shipPositions = self:getMatrixPosition()
+
+        for i, fired in ipairs(game.firedPositions) do
+            for k, shipPosition in pairs(shipPositions) do
+                if fired.col == shipPosition.column and fired.line == shipPosition.line then
+                    table.remove(game.firedPositions, i)
+                end
+            end
+        end
+    end
+
     if self.isSet or self.isCurrentSelected or isAllDestroyed then
         if self.isSet then
             love.graphics.setColor(0, 1, 0)
@@ -70,11 +82,11 @@ function Ship:draw()
             love.graphics.setColor(love.math.colorFromBytes(255, 0, 0, alpha))
 
             if self.isUp then
-                love.graphics.rectangle("fill", self.column * 40 + gridPosition, (self.line + (k - 1)) * 40,
-                    38, 38, 2, 2)
+                love.graphics.rectangle("fill", self.column * 40 + gridPosition, (self.line + (k - 1)) * 40, 38, 38, 2,
+                    2)
             else
-                love.graphics.rectangle("fill", (self.column + (k - 1)) * 40 + gridPosition, self.line * 40,
-                    38, 38, 2, 2)
+                love.graphics.rectangle("fill", (self.column + (k - 1)) * 40 + gridPosition, self.line * 40, 38, 38, 2,
+                    2)
             end
 
             love.graphics.setColor(1, 1, 1)

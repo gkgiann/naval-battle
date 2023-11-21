@@ -15,6 +15,7 @@ function Game:new()
     self.computerHits = 0
 
     self.firedPositions = {}
+    self.usedComputerPositionsInShot = {}
 
     self.usedPlayerPositions = {}
     self.usedComputerPositions = {}
@@ -284,23 +285,42 @@ function Game:randomShotPosition(isSpecialTarget)
     -- olhar se não existe algum navio parcialmente destruído
 
     if not isSpecialTarget and #self.firedPositions > 0 then
-        print("caiu aqui 02")
         local randomIndex = love.math.random(#self.firedPositions)
         local randomFiredPosition = self.firedPositions[randomIndex]
 
-        local y, x = randomFiredPosition.col, randomFiredPosition.line
-        print(string.format("randomFiredPosition=> x: %d, y: %d", x, y))
-        local freePositions, i = {}, 1
+        local x, y = randomFiredPosition.col, randomFiredPosition.line
+        local freePositions = {}
 
-        -- logica aqui
-        -- ver se tem um fired em cima
-        if x > 1 and self.usedPlayerPositions[x - 1][y] == 0 then
-            print("xablau")
-            freePositions[i] = {
-                col = x - 1,
-                line = y
+        -- ver se a esquerda pode ser jogada
+        if x > 1 and self.usedPlayerPositions[x - 1][y] < 1 then
+            freePositions[#freePositions + 1] = {
+                line = x - 1,
+                col = y
             }
-            i = i + 1
+        end
+
+        -- ver se a direita pode ser jogada
+        if x < grid.columnsQuantity and self.usedPlayerPositions[x + 1][y] < 1 then
+            freePositions[#freePositions + 1] = {
+                line = x + 1,
+                col = y
+            }
+        end
+
+        -- ver se pode ser jogado no quadrado de cima
+        if y > 1 and self.usedPlayerPositions[x][y - 1] < 1 then
+            freePositions[#freePositions + 1] = {
+                line = x,
+                col = y - 1
+            }
+        end
+
+        -- ver se pode ser jogado no quadrado de baixo
+        if y < grid.linesQuantity and self.usedPlayerPositions[x][y + 1] < 1 then
+            freePositions[#freePositions + 1] = {
+                line = x,
+                col = y + 1
+            }
         end
 
         if #freePositions > 0 then
@@ -311,8 +331,6 @@ function Game:randomShotPosition(isSpecialTarget)
         end
 
     end
-
-    print("Caiu aqui")
 
     local minus = isSpecialTarget and 2 or 0
     local x = love.math.random(grid.linesQuantity - minus)
