@@ -116,10 +116,16 @@ function Target:verifyIfHitShip()
                         game.playerStatistics.hits = game.playerStatistics.hits + 1
                     else
                         game.computerHits = game.computerHits + 1
-                        game.firedPositions[#game.firedPositions + 1] = {
+
+                        game.firedPositions.i = game.firedPositions.i + 1
+
+                        game.firedPositions.fired[game.firedPositions.i] = {
                             col = self.column,
                             line = self.line
                         }
+
+                        -- print(string.format("x: %d, y: %d", game.firedPositions.fired[game.firedPositions.i].col, game.firedPositions.fired[game.firedPositions.i].line))
+
                     end
 
                     return

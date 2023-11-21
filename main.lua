@@ -38,8 +38,8 @@ function love.load()
     grid = {
         -- columnsQuantity = 15,
         -- linesQuantity = 10,
-        columnsQuantity = 12,
-        linesQuantity = 8
+        columnsQuantity = 12 - 4,
+        linesQuantity = 8 - 2 
     }
 
     -- INSTANCIANDO AS CENAS/TELAS
