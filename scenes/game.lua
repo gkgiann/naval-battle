@@ -294,7 +294,7 @@ function Game:randomShotPosition(isSpecialTarget)
 
         -- logica aqui
         -- ver se tem um fired em cima
-        if x > grid.columnsQuantity and self.usedPlayerPositions[x][y - 1] == 0 then
+        if x > 1 and self.usedPlayerPositions[x - 1][y] == 0 then
             print("xablau")
             freePositions[i] = {
                 col = x - 1,
