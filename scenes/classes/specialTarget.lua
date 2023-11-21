@@ -154,6 +154,11 @@ function SpecialTarget:verifyIfHitShip()
                                 game.playerStatistics.hits = game.playerStatistics.hits + 1
                             else
                                 game.computerHits = game.computerHits + 1
+
+                                game.firedPositions[#game.firedPositions + 1] = {
+                                    col = pos.col,
+                                    line = pos.line
+                                }
                             end
                         end
                     end
