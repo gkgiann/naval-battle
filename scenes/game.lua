@@ -14,10 +14,7 @@ function Game:new()
 
     self.computerHits = 0
 
-    self.firedPositions = {
-        fired = {},
-        i = 0
-    }
+    self.firedPositions = {}
 
     self.usedPlayerPositions = {}
     self.usedComputerPositions = {}
@@ -286,10 +283,10 @@ function Game:randomShotPosition(isSpecialTarget)
     -- antes de gerar posições aleatórias,
     -- olhar se não existe algum navio parcialmente destruído
 
-    if not isSpecialTarget and self.firedPositions.i > 0 then
+    if not isSpecialTarget and #self.firedPositions > 0 then
         print("caiu aqui 02")
-        local randomIndex = love.math.random(self.firedPositions.i)
-        local randomFiredPosition = self.firedPositions.fired[randomIndex]
+        local randomIndex = love.math.random(#self.firedPositions)
+        local randomFiredPosition = self.firedPositions[randomIndex]
 
         local y, x = randomFiredPosition.col, randomFiredPosition.line
         print(string.format("randomFiredPosition=> x: %d, y: %d", x, y))
@@ -297,10 +294,10 @@ function Game:randomShotPosition(isSpecialTarget)
 
         -- logica aqui
         -- ver se tem um fired em cima
-        if x > grid.columnsQuantity and self.usedPlayerPositions[x-1][y] == 0 then
+        if x > grid.columnsQuantity and self.usedPlayerPositions[x][y - 1] == 0 then
             print("xablau")
             freePositions[i] = {
-                col = x-1,
+                col = x - 1,
                 line = y
             }
             i = i + 1
