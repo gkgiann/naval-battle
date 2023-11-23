@@ -3,10 +3,13 @@ Ranking = Class:extend()
 function Ranking:new()
     self.theme = love.audio.newSource("sounds/ranking.mp3", "stream")
     self.backgound = love.graphics.newImage("assets/backgrounds/game.jpg")
+    self.time = 0
 end
 
 function Ranking:update(dt)
-    if love.keyboard.isDown("return") then
+    self.time = self.time + dt
+
+    if self.time > 5 and love.keyboard.isDown("return") then
         love.audio.stop()
         reset()
     end
