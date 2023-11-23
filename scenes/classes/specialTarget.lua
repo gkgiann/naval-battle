@@ -159,6 +159,8 @@ function SpecialTarget:verifyIfHitShip()
                                     col = pos.col,
                                     line = pos.line
                                 }
+                                local fired = game.firedPositions[#game.firedPositions]
+                                print(string.format("Adicionado fired => col: %d, line: %d", fired.col, fired.line))
                             end
                         end
                     end
