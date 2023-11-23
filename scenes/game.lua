@@ -129,7 +129,7 @@ function Game:draw()
     self.computerShot:draw()
 
     self:showKeyboardControls()
-    -- self:showShipsToDestroy()
+    self:showShipsToDestroy()
 end
 
 function Game:fillUsedPositions()
@@ -284,6 +284,66 @@ function Game:randomShotPosition(isSpecialTarget)
     -- antes de gerar posições aleatórias,
     -- olhar se não existe algum navio parcialmente destruído
 
+    if #self.firedPositions > 0 then
+        for i, fired in ipairs(self.firedPositions) do
+            local x, y = fired.col, fired.line
+            local freeSpacesQuantity = 0
+
+            -- ver se a esquerda pode ser jogada
+            if x > 1 and self.usedPlayerPositions[x - 1][y] < 1 then
+                local canIncrement = true
+                for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+                    if x - 1 == usedTarget.line and y == usedTarget.col then
+                        canIncrement = false
+                    end
+                end
+
+                freeSpacesQuantity = canIncrement and freeSpacesQuantity + 1 or freeSpacesQuantity
+            end
+
+            -- ver se a direita pode ser jogada
+            if x < grid.columnsQuantity and self.usedPlayerPositions[x + 1][y] < 1 then
+                local canIncrement = true
+                for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+                    if x + 1 == usedTarget.line and y == usedTarget.col then
+                        canIncrement = false
+                    end
+                end
+
+                freeSpacesQuantity = canIncrement and freeSpacesQuantity + 1 or freeSpacesQuantity
+            end
+
+            -- ver se pode ser jogado no quadrado de cima
+            if y > 1 and self.usedPlayerPositions[x][y - 1] < 1 then
+                local canIncrement = true
+                for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+                    if x == usedTarget.line and y - 1 == usedTarget.col then
+                        canIncrement = false
+                    end
+                end
+
+                freeSpacesQuantity = canIncrement and freeSpacesQuantity + 1 or freeSpacesQuantity
+            end
+
+            -- ver se pode ser jogado no quadrado de baixo
+            if y < grid.linesQuantity and self.usedPlayerPositions[x][y + 1] < 1 then
+                local canIncrement = true
+                for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+                    if x == usedTarget.line and y + 1 == usedTarget.col then
+                        canIncrement = false
+                    end
+                end
+
+                freeSpacesQuantity = canIncrement and freeSpacesQuantity + 1 or freeSpacesQuantity
+            end
+
+            if freeSpacesQuantity == 0 then
+                table.remove(self.firedPositions, i)
+            end
+
+        end
+    end
+
     if not isSpecialTarget and #self.firedPositions > 0 then
         local randomIndex = love.math.random(#self.firedPositions)
         local randomFiredPosition = self.firedPositions[randomIndex]
@@ -327,6 +387,21 @@ function Game:randomShotPosition(isSpecialTarget)
             randomIndex = love.math.random(#freePositions)
             local position = freePositions[randomIndex]
 
+            for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+                if position.col == usedTarget.col and position.line == usedTarget.line then
+                    return self:randomShotPosition(isSpecialTarget)
+                end
+            end
+
+            if #self.usedComputerPositionsInShot == 2 then
+                self.usedComputerPositionsInShot = {}
+            else
+                self.usedComputerPositionsInShot[#self.usedComputerPositionsInShot + 1] = {
+                    col = position.col,
+                    line = position.line
+                }
+            end
+
             return position.col, position.line
         end
 
@@ -337,8 +412,22 @@ function Game:randomShotPosition(isSpecialTarget)
     local y = love.math.random(grid.columnsQuantity - minus)
 
     if self.usedPlayerPositions[y][x] > 0 then
-
         return self:randomShotPosition(isSpecialTarget)
+    end
+
+    for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
+        if x == usedTarget.col and y == usedTarget.line then
+            return self:randomShotPosition(isSpecialTarget)
+        end
+    end
+
+    if #self.usedComputerPositionsInShot == 2 then
+        self.usedComputerPositionsInShot = {}
+    else
+        self.usedComputerPositionsInShot[#self.usedComputerPositionsInShot + 1] = {
+            col = x,
+            line = y
+        }
     end
 
     return x, y

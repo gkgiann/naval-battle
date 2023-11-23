@@ -3,7 +3,7 @@ Shot = Class:extend()
 function Shot:new(isPlayerShot)
     self.isPlayerShot = isPlayerShot and isPlayerShot or false
     self.isSpecial = false
-    self.specialAttackCount = 0
+    self.specialAttackCount = 2
     self.targets = {Target(self.isPlayerShot), Target(self.isPlayerShot), Target(self.isPlayerShot)}
     self.specialTarget = SpecialTarget(self.isPlayerShot)
     self.currentTargetIndex = 1
