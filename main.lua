@@ -9,11 +9,11 @@ function love.load()
     require "scenes/game"
     require "scenes/mainGame"
     require "scenes/endGame"
+    require "scenes/ranking"
     require "scenes/classes/ship"
     require "scenes/classes/target"
     require "scenes/classes/specialTarget"
     require "scenes/classes/shot"
-    require 'lib.sqlite3'
 
     -- TAMANHO DA JANELA
     windowWidth = 1334
@@ -47,12 +47,14 @@ function love.load()
     mainGame = MainGame()
     game = Game()
     endGame = EndGame()
+    ranking = Ranking()
 
     scenes = {
         mainGame = mainGame,
         setup = setup,
         game = game,
-        endGame = endGame
+        endGame = endGame,
+        ranking = ranking
     }
 
     currentScene = "mainGame"
@@ -83,4 +85,76 @@ function createGrid(x, y)
     end
     love.graphics.setColor(1, 1, 1)
 
+end
+
+function reset()
+    setup = Setup()
+    mainGame = MainGame()
+    game = Game()
+    endGame = EndGame()
+    ranking = Ranking()
+
+    scenes = {
+        mainGame = mainGame,
+        setup = setup,
+        game = game,
+        endGame = endGame,
+        ranking = ranking
+    }
+
+    currentScene = "mainGame"
+end
+
+function savePlayersToFile(players)
+    local file = io.open("ranking.txt", "w")
+
+    for _, player in ipairs(players) do
+        file:write(string.format("%s %d %d %d\n", player.name, player.shots, player.time, player.won and 1 or 0))
+    end
+
+    file:close()
+end
+
+function addNewPlayerToRanking(name, totalShots, time, won)
+    local players = findPlayers()
+    local player = {
+        name = name,
+        shots = totalShots,
+        time = time,
+        won = won
+    }
+
+    table.insert(players, player)
+    savePlayersToFile(players)
+end
+
+function findPlayers()
+    local players = {}
+    local file = io.open("ranking.txt", "r")
+
+    if file then
+        for line in file:lines() do
+            local name, shots, playtime, won = line:match("(%S+) (%d+) (%d+) (%d+)")
+            table.insert(players, {
+                name = name,
+                shots = tonumber(shots),
+                time = tonumber(playtime),
+                won = tonumber(won) == 1
+            })
+        end
+
+        file:close()
+
+        table.sort(players, function(a, b)
+            if a.won ~= b.won then
+                return a.won
+            elseif a.shots ~= b.shots then
+                return a.shots < b.shots
+            else
+                return a.time < b.time
+            end
+        end)
+    end
+
+    return players
 end

@@ -8,6 +8,7 @@ function EndGame:new()
     self.backgound = love.graphics.newImage("assets/backgrounds/mainGame.jpg")
     self.time = 0
     self.playerName = ""
+    self.added = false
 
     self.letters = {
         a = "a",
@@ -43,7 +44,7 @@ end
 function EndGame:update(dt)
     self.time = self.time + dt
 
-    if self.time > 0.15 then
+    if self.time > 0.2 then
         self:inputPlayerName()
     end
 end
@@ -114,16 +115,19 @@ function EndGame:inputPlayerName()
 
         if love.keyboard.isDown("backspace") then
             self.playerName = ""
-
-            self.time = 0
         end
 
         if love.keyboard.isDown("return") then
             if #self.playerName > 3 then
-                -- trocar para a tela de ranking
+                love.audio.stop()
+                if not self.added then
+                    local shots, hits, time = game.playerStatistics.shots, game.playerStatistics.hits,
+                        game.playerStatistics.time
+                    addNewPlayerToRanking(self.playerName, shots, time, hits == 30)
+                    self.added = true
+                end
 
-                -- love.audio.stop()
-                -- currentScene = ""
+                currentScene = "ranking"
             end
         end
     end
