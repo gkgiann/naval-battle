@@ -281,11 +281,8 @@ function Game:computerPlay()
 end
 
 function Game:randomShotPosition(isSpecialTarget)
-    -- antes de gerar posiÃ§Ãµes aleatÃ³rias,
-    -- olhar se nÃ£o existe algum navio parcialmente destruÃ­do
-
+    print(string.format("Tenta jogar o tiro %d", #self.usedComputerPositionsInShot))
     print(string.format("===========\ntamanho do fired positions: %d", #self.firedPositions))
-        print(string.format("Tenta jogar o tiro %d", #self.usedComputerPositionsInShot))
 
     if #self.firedPositions > 0 then
         for i, fired in ipairs(self.firedPositions) do
@@ -300,6 +297,7 @@ function Game:randomShotPosition(isSpecialTarget)
                         canIncrement = false
                     end
                 end
+
 
                 freeSpacesQuantity = canIncrement and freeSpacesQuantity + 1 or freeSpacesQuantity
             end
@@ -349,7 +347,7 @@ function Game:randomShotPosition(isSpecialTarget)
         end
     end
 
-    print(string.format("tamanho do fired positions apÃ³s ver se tem que remover algum: %d", #self.firedPositions))
+    print(string.format("tamanho do fired positions apos ver se tem que remover algum: %d", #self.firedPositions))
 
     if not isSpecialTarget and #self.firedPositions > 0 then
         print(string.format("Tenta jogar o tiro %d ao lado de uma fired", #self.usedComputerPositionsInShot))
@@ -399,11 +397,11 @@ function Game:randomShotPosition(isSpecialTarget)
             randomIndex = love.math.random(#freePositions)
             local position = freePositions[randomIndex]
 
-            print(string.format("posicao a ser jogada: col: %d, line: %d", position.col, position.line))
-            
+            print(string.format("posicao a ser jogada: line: %d, col: %d", position.col, position.line))
+
             for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
                 if position.col == usedTarget.col and position.line == usedTarget.line then
-                    print(string.format("nÃ£o pode jogar aqui: col: %d, line: %d", position.col, position.line))
+                    print(string.format("nao pode jogar aqui: col: %d, line: %d", position.col, position.line))
                     return self:randomShotPosition(isSpecialTarget)
                 end
             end
@@ -422,34 +420,34 @@ function Game:randomShotPosition(isSpecialTarget)
 
     end
 
-    print("Jogando aleatÃ³rio sem ser ao lado de algum fired")
+    print("Jogando aleatorio sem ser ao lado de algum fired")
     local minus = isSpecialTarget and 2 or 0
     local x = love.math.random(grid.linesQuantity - minus)
     local y = love.math.random(grid.columnsQuantity - minus)
 
     if self.usedPlayerPositions[y][x] > 0 then
-        print(string.format("posiÃ§Ã£o %d %d jÃ¡ usada", y,x))
+        print(string.format("posicao %d %d ja usada", y,x))
         return self:randomShotPosition(isSpecialTarget)
     end
 
     for k, usedTarget in pairs(self.usedComputerPositionsInShot) do
         if x == usedTarget.col and y == usedTarget.line then
-            print("posiÃ§Ã£o %d %d jÃ¡ usada por um tiro agora", y,x)
+            print("posicao %d %d ja usada por um tiro agora", y,x)
             return self:randomShotPosition(isSpecialTarget)
         end
     end
 
     if not isSpecialTarget then
-        
-        
         if #self.usedComputerPositionsInShot == 2 then
-            print("Ãºltimo tiro, zera o array de tiros usados")
+            print("Ultimo tiro, zera o array de tiros usados")
             self.usedComputerPositionsInShot = {}
         else
-            self.usedComputerPositionsInShot[#self.usedComputerPositionsInShot + 1] = {
-                col = x,
-                line = y
-            }
+            table.insert(self.usedComputerPositionsInShot, {col = x,
+            line = y})
+            -- self.usedComputerPositionsInShot[#self.usedComputerPositionsInShot + 1] = {
+            --     col = x,
+            --     line = y
+            -- }
         end
     end
 

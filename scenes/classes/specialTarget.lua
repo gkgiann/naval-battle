@@ -155,10 +155,12 @@ function SpecialTarget:verifyIfHitShip()
                             else
                                 game.computerHits = game.computerHits + 1
 
-                                game.firedPositions[#game.firedPositions + 1] = {
-                                    col = pos.col,
-                                    line = pos.line
-                                }
+                                table.insert(game.firedPositions, {col = pos.col,
+                        line = pos.line})
+                                -- game.firedPositions[#game.firedPositions + 1] = {
+                                --     col = pos.col,
+                                --     line = pos.line
+                                -- }
                                 local fired = game.firedPositions[#game.firedPositions]
                                 print(string.format("Adicionado fired => col: %d, line: %d", fired.col, fired.line))
                             end
