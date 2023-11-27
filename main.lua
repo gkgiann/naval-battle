@@ -8,8 +8,12 @@ function love.load()
     require "scenes/setup"
     require "scenes/game"
     require "scenes/mainGame"
+    require "scenes/endGame"
+    require "scenes/ranking"
     require "scenes/classes/ship"
-    require 'lib.sqlite3'
+    require "scenes/classes/target"
+    require "scenes/classes/specialTarget"
+    require "scenes/classes/shot"
 
     -- TAMANHO DA JANELA
     windowWidth = 1334
@@ -19,11 +23,14 @@ function love.load()
     -- EFEITOS SONOROS
     wrongEffect = love.audio.newSource("sounds/wrong.wav", "static")
     moveShipEffect = love.audio.newSource("sounds/moveShip.mp3", "static")
+    initialHitEffect = love.audio.newSource("sounds/hit0.wav", "static")
+    hitEffect = love.audio.newSource("sounds/hit.wav", "static")
 
     -- FONTES
     font20 = love.graphics.newFont("fonts/wheatonCapitals.otf", 20)
     font30 = love.graphics.newFont("fonts/wheatonCapitals.otf", 30)
     font40 = love.graphics.newFont("fonts/wheatonCapitals.otf", 40)
+    font50 = love.graphics.newFont("fonts/wheatonCapitals.otf", 50)
     font90 = love.graphics.newFont("fonts/wheatonCapitals.otf", 90)
     love.graphics.setFont(font20)
 
@@ -35,17 +42,19 @@ function love.load()
         linesQuantity = 8
     }
 
-    computerGridPositionX = windowWidth - (grid.columnsQuantity * 40) - 80
-
     -- INSTANCIANDO AS CENAS/TELAS
     setup = Setup()
     mainGame = MainGame()
     game = Game()
+    endGame = EndGame()
+    ranking = Ranking()
 
     scenes = {
         mainGame = mainGame,
         setup = setup,
-        game = game
+        game = game,
+        endGame = endGame,
+        ranking = ranking
     }
 
     currentScene = "mainGame"
@@ -55,6 +64,7 @@ function love.update(dt)
     scenes[currentScene]:update(dt)
 
     if love.keyboard.isDown("q") then
+        love.window.close()
         love.event.quit()
     end
 
@@ -75,4 +85,76 @@ function createGrid(x, y)
     end
     love.graphics.setColor(1, 1, 1)
 
+end
+
+function reset()
+    setup = Setup()
+    mainGame = MainGame()
+    game = Game()
+    endGame = EndGame()
+    ranking = Ranking()
+
+    scenes = {
+        mainGame = mainGame,
+        setup = setup,
+        game = game,
+        endGame = endGame,
+        ranking = ranking
+    }
+
+    currentScene = "mainGame"
+end
+
+function savePlayersToFile(players)
+    local file = io.open("ranking.txt", "w")
+
+    for _, player in ipairs(players) do
+        file:write(string.format("%s %d %d %d\n", player.name, player.shots, player.time, player.won and 1 or 0))
+    end
+
+    file:close()
+end
+
+function addNewPlayerToRanking(name, totalShots, time, won)
+    local players = findPlayers()
+    local player = {
+        name = name,
+        shots = totalShots,
+        time = time,
+        won = won
+    }
+
+    table.insert(players, player)
+    savePlayersToFile(players)
+end
+
+function findPlayers()
+    local players = {}
+    local file = io.open("ranking.txt", "r")
+
+    if file then
+        for line in file:lines() do
+            local name, shots, playtime, won = line:match("(%S+) (%d+) (%d+) (%d+)")
+            table.insert(players, {
+                name = name,
+                shots = tonumber(shots),
+                time = tonumber(playtime),
+                won = tonumber(won) == 1
+            })
+        end
+
+        file:close()
+
+        table.sort(players, function(a, b)
+            if a.won ~= b.won then
+                return a.won
+            elseif a.shots ~= b.shots then
+                return a.shots < b.shots
+            else
+                return a.time < b.time
+            end
+        end)
+    end
+
+    return players
 end

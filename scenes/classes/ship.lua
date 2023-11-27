@@ -7,6 +7,7 @@ function Ship:new(len)
     self.isUp = false
     self.isSet = false
     self.isCurrentSelected = false
+    self.moveBlocked = false
     self.length = len
     self.img = love.graphics.newImage(string.format('assets/ships/ship%d.png', len))
     self.time = 0
@@ -15,16 +16,22 @@ function Ship:new(len)
         g = 1,
         b = 1
     }
+    self.destroyedParts = {}
+
+    for i = 1, self.length do
+        self.destroyedParts[i] = false
+    end
+
 end
 
 function Ship:update(dt)
     self.time = self.time + dt
 
-    if self.time > 0.6 then
+    if self.time > 0.25 then
         self.color.r, self.color.g, self.color.b = 1, 1, 1
     end
 
-    if self.isCurrentSelected and not self.isComputerShip then
+    if self.isCurrentSelected and not self.isComputerShip and not self.moveBlocked then
         self:move(dt)
     end
 end
@@ -32,7 +39,21 @@ end
 function Ship:draw()
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
 
-    if self.isSet or self.isCurrentSelected then
+    local isAllDestroyed = self:isShipDestroyed()
+
+    if isAllDestroyed then
+        local shipPositions = self:getMatrixPosition()
+
+        for i, fired in ipairs(game.firedPositions) do
+            for k, shipPosition in pairs(shipPositions) do
+                if fired.col == shipPosition.column and fired.line == shipPosition.line then
+                    table.remove(game.firedPositions, i)
+                end
+            end
+        end
+    end
+
+    if self.isSet or self.isCurrentSelected or isAllDestroyed then
         if self.isSet then
             love.graphics.setColor(0, 1, 0)
         end
@@ -49,6 +70,27 @@ function Ship:draw()
         else
             love.graphics.draw(self.img, ((40 * self.column) + plus) + marginX, (40 * self.line) + 2, 0)
         end
+
+    end
+
+    for k, isPartDestroyed in pairs(self.destroyedParts) do
+        if isPartDestroyed then
+
+            local alpha = isAllDestroyed and 150 or 230
+            local gridPosition = self.isComputerShip and computerGridPositionX or 0
+
+            love.graphics.setColor(love.math.colorFromBytes(255, 0, 0, alpha))
+
+            if self.isUp then
+                love.graphics.rectangle("fill", self.column * 40 + gridPosition, (self.line + (k - 1)) * 40, 38, 38, 2,
+                    2)
+            else
+                love.graphics.rectangle("fill", (self.column + (k - 1)) * 40 + gridPosition, self.line * 40, 38, 38, 2,
+                    2)
+            end
+
+            love.graphics.setColor(1, 1, 1)
+        end
     end
 
     love.graphics.setColor(1, 1, 1)
@@ -56,7 +98,7 @@ function Ship:draw()
 end
 
 function Ship:move(dt)
-    if self.time > 0.25 and love.keyboard.isDown("rshift") then
+    if self.time > 0.25 and (love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift")) then
         canRotate = true
 
         if self.isUp then
@@ -173,4 +215,16 @@ function Ship:getMatrixPosition()
     end
 
     return positions
+end
+
+function Ship:isShipDestroyed()
+    local destroyedsQuantity = 0
+
+    for k, isPartDestroyed in pairs(self.destroyedParts) do
+        if isPartDestroyed then
+            destroyedsQuantity = destroyedsQuantity + 1
+        end
+    end
+
+    return destroyedsQuantity == self.length
 end

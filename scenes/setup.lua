@@ -11,11 +11,11 @@ function Setup:new()
 
     self.setupSong:setLooping(true)
 
-    playerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
-    computerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
+    -- playerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
+    -- computerShips = {Ship(2), Ship(3), Ship(4), Ship(5)}
 
-    -- playerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
-    -- computerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+    playerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
+    computerShips = {Ship(2), Ship(2), Ship(2), Ship(2), Ship(3), Ship(3), Ship(3), Ship(4), Ship(4), Ship(5)}
 
     for k, ship in pairs(computerShips) do
         ship.isComputerShip = true
@@ -34,7 +34,7 @@ function Setup:update(dt)
             ship:update(dt)
         end
 
-        if self.time > 0.3 and self.currentShipIndex <= #playerShips and love.keyboard.isDown("return") then
+        if self.time > 0.25 and self.currentShipIndex <= #playerShips and love.keyboard.isDown("return") then
             if self:isPositionFree() then
 
                 self:setComputerShipPosition()
@@ -63,6 +63,7 @@ function Setup:update(dt)
         end
 
         if self.time > 2 then
+            game:fillShipsPosition()
             currentScene = "game"
             love.audio.stop()
         end
